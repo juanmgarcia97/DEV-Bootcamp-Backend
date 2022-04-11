@@ -14,12 +14,11 @@
       "outFiles": ["${workspaceFolder}/**/*.js"]
     },
     {
-      "type": "pwa-node",
+      "type": "node",
       "request": "launch",
       "name": "Launch Program TS",
-      "skipFiles": ["<node_internals>/**"],
-      "program": "${workspaceFolder}\\src\\index.ts",
-      "runtimeArgs": ["ts-node"]
+      "runtimeArgs": ["-r", "ts-node/register"],
+      "args": ["${workspaceFolder}/src/index.ts"]
     }
   ]
 }
