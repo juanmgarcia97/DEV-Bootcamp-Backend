@@ -12,6 +12,14 @@
       "program": "${workspaceFolder}\\src\\index.ts",
       "preLaunchTask": "tsc: build - tsconfig.json",
       "outFiles": ["${workspaceFolder}/**/*.js"]
+    },
+    {
+      "type": "pwa-node",
+      "request": "launch",
+      "name": "Launch Program TS",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}\\src\\index.ts",
+      "runtimeArgs": ["ts-node"]
     }
   ]
 }
