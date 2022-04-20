@@ -39,3 +39,81 @@ add.bind(null, 10, 20); // Crea una nueva funcion, se pueden agregar parametros
 
 // Tarea: entender y traer ejemplo practico del bind
 
+// object definition
+const student1= {
+  name: "Jack",
+  introduction: function(score: number) {
+      console.log(this.name + "scored " + score + " in an exam.");
+  }
+}
+
+// object definition 
+const student2= {
+  name: "Jimmy ",
+}
+
+// using bind() method 
+let introduction= student1.introduction.bind(student2, 95);
+
+// invoking introduction() function
+introduction();
+
+// THIS
+
+let x = {
+  a() {
+    return this;
+  }
+}
+
+x.a();
+console.log(x.a());
+
+let a = x.a;
+a();
+
+console.log(a()); //undefined, por estas inconsistencias casi no se usa this
+
+// Manera segura
+function fancyDate(this: Date) {
+  return `${this.getDate()} / ${this.getMonth()} / ${this.getFullYear()}`
+}
+
+fancyDate.call(new Date)
+
+// GENERATORS
+
+function* createNumbers() {
+  let n = 0;
+  while(true) {
+    yield n++;  //yield = return + pausa del estado
+  }
+}
+
+
+function* generateFibonacci() {
+  let first = 0;
+  let second = 1;
+  let aux = 0;
+
+  while(true) {
+    yield first;
+    aux = first;
+    first = second;
+    second = aux + second;
+    // [first, second] = [second, first + second] //ES6 array destructuring
+  }
+}
+
+let numbers = generateFibonacci();
+console.log(numbers.next());
+console.log(numbers.next());
+console.log(numbers.next());
+console.log(numbers.next());
+console.log(numbers.next());
+console.log(numbers.next());
+console.log(numbers.next());
+console.log(numbers.next());
+console.log(numbers.next());
+console.log(numbers.next());
+console.log(numbers.next());
