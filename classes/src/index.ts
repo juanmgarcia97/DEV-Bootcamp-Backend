@@ -1,7 +1,8 @@
 // class Game { }
 
-import King from "./king";
+import King from './king';
 import { Position } from './position';
+import Queen from './queen';
 
 // class Piece { }
 
@@ -14,6 +15,6 @@ import { Position } from './position';
 // class Pawn extends Piece { }
 // class Knight extends Piece { }
 
-let king = new King('Black', 'A', 1);
+let king = new Queen('Black', 'D', 4);
 
-console.log(king.canMoveTo(new Position('C', 2)));
+console.log(king.canMoveTo(new Position('A', 1)));
