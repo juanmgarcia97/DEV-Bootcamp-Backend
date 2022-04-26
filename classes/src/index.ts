@@ -17,4 +17,4 @@ import Queen from './queen';
 
 let king = new Queen('Black', 'D', 4);
 
-console.log(king.canMoveTo(new Position('A', 1)));
+console.log(king.canMoveTo(new Position('B', 7)));
