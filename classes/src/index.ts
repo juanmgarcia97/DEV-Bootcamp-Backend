@@ -15,6 +15,6 @@ import Queen from './queen';
 // class Pawn extends Piece { }
 // class Knight extends Piece { }
 
-let king = new Queen('Black', 'D', 4);
+let queen = new Queen('Black', 'D', 4);
 
-console.log(king.canMoveTo(new Position('B', 7)));
+console.log(queen.canMoveTo(new Position('A', 2)));
