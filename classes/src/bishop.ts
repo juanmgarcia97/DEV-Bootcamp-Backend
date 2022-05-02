@@ -1,7 +1,7 @@
 import Piece from './piece';
 import { Position } from './position';
 
-export default class Rook extends Piece {
+export default class Bishop extends Piece {
   canMoveTo(position: Position): boolean {
     if (
       this.position.getFile() === position.getFile() &&
@@ -9,8 +9,10 @@ export default class Rook extends Piece {
     )
       return false;
     return (
-      this.position.getRank() === position.getRank() ||
-      this.position.getFile().charCodeAt(0) === position.getFile().charCodeAt(0)
+      Math.abs(this.position.getRank() - position.getRank()) ==
+      Math.abs(
+        this.position.getFile().charCodeAt(0) - position.getFile().charCodeAt(0)
+      )
     );
   }
 }
