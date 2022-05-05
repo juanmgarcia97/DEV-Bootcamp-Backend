@@ -1,16 +1,16 @@
-// class Game { }
+import Game from './game';
+import express from 'express';
+import Board from './domain/board';
 
-import King from './domain/king';
-import { Position } from './domain/position';
-import Queen from './domain/queen';
+const app = express();
+const port = 3_000;
 
-// class Piece { }
+app.get('/', (request, response) => {
+  let board = new Board();
+  let game = new Game(board);
+  response.send(game);
+});
 
-// class Position { }
-
-// class King extends Piece { }
-// class Queen extends Piece { }
-// class Bishop extends Piece { }
-// class Rook extends Piece { }
-// class Pawn extends Piece { }
-// class Knight extends Piece { }
+app.listen(port, () => {
+  console.log(`Server listening on port: ${port}`);
+});

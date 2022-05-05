@@ -3,14 +3,14 @@ import { IUserService } from './user.service.interface';
 import { IUserRepository } from '../repository/user.repository.interface';
 import container from '../../inversify.config';
 import TYPES from '../infrastructure/types';
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 
 @injectable()
 export class UserService implements IUserService {
   private userRepository: IUserRepository;
 
-  constructor() {
-    this.userRepository = container.get<IUserRepository>(TYPES.IUserRepository);
+  constructor(@inject('IUserRepository') userRepository: IUserRepository) {
+    this.userRepository = userRepository;
   }
   getUsers(): Promise<user[]> {
     return this.userRepository.getAll();

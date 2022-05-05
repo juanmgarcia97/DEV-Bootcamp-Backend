@@ -1,7 +1,12 @@
+import Piece from './piece';
 import { File, Rank } from './types';
 
 export class Position {
-  constructor(private file: File, private rank: Rank) {}
+  private piece: Piece | undefined;
+
+  constructor(private file: File, private rank: Rank, piece?: Piece) {
+    this.piece = piece;
+  }
 
   get getFile() {
     return this.file;
