@@ -1,15 +1,23 @@
-import Game from './game';
 import express from 'express';
-import Board from './domain/board';
+import GameRepository from './infrastructure/game.repository';
 
 const app = express();
 const port = 3_000;
 
+let repository: GameRepository = new GameRepository();
+// let service: GameService = new GameService(repository);
+
 app.get('/', (request, response) => {
-  let board = new Board();
-  let game = new Game(board);
-  response.send(game);
+  response.send(repository.initGame());
 });
+
+app.post('/reset', (request, response) => {
+  repository.resetGame()
+  response.status(200).send({
+    message: "Game reset",
+    body: repository.getGame()
+  })
+})
 
 app.listen(port, () => {
   console.log(`Server listening on port: ${port}`);

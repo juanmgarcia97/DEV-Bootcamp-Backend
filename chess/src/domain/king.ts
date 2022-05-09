@@ -3,10 +3,10 @@ import { Position } from './position';
 import { Color, Rank, File, Type } from './types';
 
 export default class King extends Piece {
-  private type: Type;
   constructor(color: Color, file: File, rank: Rank) {
     super(color, file, rank);
     this.type = 'King';
+    this.alive = true
   }
   canMoveTo(position: Position): boolean {
     return (

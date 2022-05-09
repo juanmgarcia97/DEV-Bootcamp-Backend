@@ -6,41 +6,45 @@ import Queen from './queen';
 import Rook from './rook';
 
 export default class Board {
-  private wKing: King;
-  private wQueen: Queen;
-  private w1Bishop: Bishop;
-  private w2Bishop: Bishop;
-  private w1Knight: Knight;
-  private w2Knight: Knight;
-  private w1Rook: Rook;
-  private w2Rook: Rook;
-  private w1Pawn: Pawn;
-  private w2Pawn: Pawn;
-  private w3Pawn: Pawn;
-  private w4Pawn: Pawn;
-  private w5Pawn: Pawn;
-  private w6Pawn: Pawn;
-  private w7Pawn: Pawn;
-  private w8Pawn: Pawn;
+  private wKing!: King;
+  private wQueen!: Queen;
+  private w1Bishop!: Bishop;
+  private w2Bishop!: Bishop;
+  private w1Knight!: Knight;
+  private w2Knight!: Knight;
+  private w1Rook!: Rook;
+  private w2Rook!: Rook;
+  private w1Pawn!: Pawn;
+  private w2Pawn!: Pawn;
+  private w3Pawn!: Pawn;
+  private w4Pawn!: Pawn;
+  private w5Pawn!: Pawn;
+  private w6Pawn!: Pawn;
+  private w7Pawn!: Pawn;
+  private w8Pawn!: Pawn;
 
-  private bKing: King;
-  private bQueen: Queen;
-  private b1Bishop: Bishop;
-  private b2Bishop: Bishop;
-  private b1Knight: Knight;
-  private b2Knight: Knight;
-  private b1Rook: Rook;
-  private b2Rook: Rook;
-  private b1Pawn: Pawn;
-  private b2Pawn: Pawn;
-  private b3Pawn: Pawn;
-  private b4Pawn: Pawn;
-  private b5Pawn: Pawn;
-  private b6Pawn: Pawn;
-  private b7Pawn: Pawn;
-  private b8Pawn: Pawn;
+  private bKing!: King;
+  private bQueen!: Queen;
+  private b1Bishop!: Bishop;
+  private b2Bishop!: Bishop;
+  private b1Knight!: Knight;
+  private b2Knight!: Knight;
+  private b1Rook!: Rook;
+  private b2Rook!: Rook;
+  private b1Pawn!: Pawn;
+  private b2Pawn!: Pawn;
+  private b3Pawn!: Pawn;
+  private b4Pawn!: Pawn;
+  private b5Pawn!: Pawn;
+  private b6Pawn!: Pawn;
+  private b7Pawn!: Pawn;
+  private b8Pawn!: Pawn;
 
   constructor() {
+    this.initBoard()
+  }
+
+  initBoard() {
     this.wKing = new King('White', 'E', 1);
     this.wQueen = new Queen('White', 'D', 1);
     this.w1Bishop = new Bishop('White', 'F', 1);

@@ -3,10 +3,10 @@ import { Position } from './position';
 import { Color, Rank, File, Type } from './types';
 
 export default class Rook extends Piece {
-  private type: Type;
   constructor(color: Color, file: File, rank: Rank) {
     super(color, file, rank);
     this.type = 'Rook';
+    this.alive = true
   }
   canMoveTo(position: Position): boolean {
     if (

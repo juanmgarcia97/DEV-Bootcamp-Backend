@@ -1,17 +1,30 @@
-import game from '../game';
+import Board from '../domain/board';
+import Game from '../domain/game';
 import IGameRepository from '../repository/igame.repository';
 
 export default class GameRepository implements IGameRepository {
-  saveGame(game: game): void {
+  private game!: Game;
+
+  getGame(): Game {
+    return this.game;
+  }
+
+  initGame(): Game {
+    let board = new Board();
+    this.game = new Game(board);
+    return this.game;
+  }
+  saveGame(game: Game): void {
     throw new Error('Method not implemented.');
   }
-  resetGame(game: game): void {
+  resetGame(): void {
+    this.game.setBoard = new Board()
+    this.game.initPlayers()
+  }
+  loadGame(id: number): Game {
     throw new Error('Method not implemented.');
   }
-  loadGame(id: number): game {
-    throw new Error('Method not implemented.');
-  }
-  finishGame(game: game): void {
+  finishGame(game: Game): void {
     throw new Error('Method not implemented.');
   }
 }
