@@ -2,7 +2,7 @@ import { Position } from '../../src/domain/position';
 import Bishop from '../../src/domain/bishop';
 
 describe('Bishop Tests', () => {
-  let bishop = new Bishop('White', 'D', 1);
+  let bishop = new Bishop('White', new Position('D', 1));
 
   it('Should move diagonally', () => {
     let position = new Position('H', 5);

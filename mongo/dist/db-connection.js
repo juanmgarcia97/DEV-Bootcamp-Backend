@@ -20,7 +20,7 @@ class DbConnection {
     }
     connect() {
         return __awaiter(this, void 0, void 0, function* () {
-            yield mongoose_1.default.connect(this.DB_CONNECTION, {});
+            yield mongoose_1.default.connect(this.DB_CONNECTION);
         });
     }
     disconnect() {

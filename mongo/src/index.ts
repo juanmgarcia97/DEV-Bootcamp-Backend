@@ -18,21 +18,21 @@ class Test {
 
     let createdBook = await bookDatAccess.save(book);
 
-    console.log(createdBook);
+    // console.log(createdBook);
 
     let readedBook = await bookDatAccess.read(createdBook.id);
+    if (readedBook != null) {
+      readedBook.title = 'UPDATED';
+      await bookDatAccess.update(readedBook._id, readedBook);
 
-    readedBook.title = 'UPDATED';
-    await bookDatAccess.update(readedBook._id, readedBook);
+      await bookDatAccess.remove(readedBook._id);
 
-    await bookDatAccess.remove(readedBook._id);
+      const gridFS = new GridFS();
+      //await gridFS.upload('helloWorld.txt');
+      //await gridFS.upload('mongodb-windows-x86_64-5.0.8-signed.msi');
 
-    const gridFS = new GridFS();
-    //await gridFS.upload('helloWorld.txt');
-    //await gridFS.upload('mongodb-windows-x86_64-5.0.8-signed.msi');
-
-    await gridFS.download('mongodb-windows-x86_64-5.0.8-signed.msi');
-
+      await gridFS.download('mongodb-windows-x86_64-5.0.8-signed.msi');
+    }
     //optional
     //await dbConnection.disconnect();
   }

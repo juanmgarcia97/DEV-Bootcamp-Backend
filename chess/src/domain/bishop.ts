@@ -3,8 +3,8 @@ import { Position } from './position';
 import { Color, Rank, File, Type } from './types';
 
 export default class Bishop extends Piece {
-  constructor(color: Color, file: File, rank: Rank) {
-    super(color, file, rank);
+  constructor(color: Color, position: Position) {
+    super(color, position);
     this.type = 'Bishop';
     this.alive = true
   }

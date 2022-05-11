@@ -2,7 +2,7 @@ import { Position } from '../../src/domain/position';
 import Rook from '../../src/domain/rook';
 
 describe('Rook Tests', () => {
-  let rook = new Rook('White', 'D', 1);
+  let rook = new Rook('White', new Position('D', 1));
 
   it('Should move vertically', () => {
     let position = new Position('D', 8);

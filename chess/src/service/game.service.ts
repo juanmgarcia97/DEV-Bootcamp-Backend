@@ -1,7 +1,8 @@
 import { injectable, inject } from 'inversify';
-import { TYPES } from '../domain/types';
+import { Color, TYPES } from '../domain/types';
 import Game from '../domain/game';
 import IGameRepository from '../repository/igame.repository';
+import { Position } from '../domain/position';
 
 @injectable()
 export default class GameService {
@@ -18,16 +19,20 @@ export default class GameService {
   initGame(): Game {
     return this.gameRepository.initGame()
   }
-  saveGame(game: Game): void {
-    this.gameRepository.saveGame(game);
+
+  movePiece(turn: Color, start: Position, end: Position): boolean {
+    return this.gameRepository.movePiece(turn, start, end);
   }
+  // saveGame(game: Game): void {
+  //   this.gameRepository.saveGame(game);
+  // }
   resetGame(): void {
     this.gameRepository.resetGame();
   }
-  loadGame(id: number): Game {
-    return this.gameRepository.loadGame(id);
-  }
-  finishGame(game: Game): void {
-    this.gameRepository.finishGame(game);
-  }
+  // loadGame(id: number): Game {
+  //   return this.gameRepository.loadGame(id);
+  // }
+  // finishGame(game: Game): void {
+  //   this.gameRepository.finishGame(game);
+  // }
 }

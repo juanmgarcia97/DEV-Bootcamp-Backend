@@ -2,7 +2,7 @@ import { Position } from '../../src/domain/position';
 import Queen from '../../src/domain/queen';
 
 describe('Queen Tests', () => {
-  let queen = new Queen('White', 'D', 1);
+  let queen = new Queen('White', new Position('D', 1));
 
   it('Should move vertically', () => {
     let position = new Position('D', 8);

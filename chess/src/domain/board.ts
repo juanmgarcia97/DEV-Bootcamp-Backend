@@ -4,6 +4,9 @@ import Knight from './knight';
 import Pawn from './pawn';
 import Queen from './queen';
 import Rook from './rook';
+import Piece from './piece';
+import { Position } from './position';
+import { Rank, File, Color, NFile } from './types';
 
 export default class Board {
   private wKing!: King;
@@ -40,43 +43,56 @@ export default class Board {
   private b7Pawn!: Pawn;
   private b8Pawn!: Pawn;
 
+  private cells!: Piece[];
+
   constructor() {
-    this.initBoard()
+    this.init()
   }
 
-  initBoard() {
-    this.wKing = new King('White', 'E', 1);
-    this.wQueen = new Queen('White', 'D', 1);
-    this.w1Bishop = new Bishop('White', 'F', 1);
-    this.w2Bishop = new Bishop('White', 'C', 1);
-    this.w1Knight = new Knight('White', 'B', 1);
-    this.w2Knight = new Knight('White', 'G', 1);
-    this.w1Rook = new Rook('White', 'A', 1);
-    this.w2Rook = new Rook('White', 'H', 1);
-    this.w1Pawn = new Pawn('White', 'A', 2);
-    this.w2Pawn = new Pawn('White', 'B', 2);
-    this.w3Pawn = new Pawn('White', 'C', 2);
-    this.w4Pawn = new Pawn('White', 'D', 2);
-    this.w5Pawn = new Pawn('White', 'E', 2);
-    this.w6Pawn = new Pawn('White', 'F', 2);
-    this.w7Pawn = new Pawn('White', 'G', 2);
-    this.w8Pawn = new Pawn('White', 'H', 2);
+  get getBoard() {
+    return this.cells;
+  }
 
-    this.bKing = new King('Black', 'E', 8);
-    this.bQueen = new Queen('Black', 'D', 8);
-    this.b1Bishop = new Bishop('Black', 'F', 8);
-    this.b2Bishop = new Bishop('Black', 'C', 8);
-    this.b1Knight = new Knight('Black', 'B', 8);
-    this.b2Knight = new Knight('Black', 'G', 8);
-    this.b1Rook = new Rook('Black', 'A', 8);
-    this.b2Rook = new Rook('Black', 'H', 8);
-    this.b1Pawn = new Pawn('Black', 'A', 7);
-    this.b2Pawn = new Pawn('Black', 'B', 7);
-    this.b3Pawn = new Pawn('Black', 'C', 7);
-    this.b4Pawn = new Pawn('Black', 'D', 7);
-    this.b5Pawn = new Pawn('Black', 'E', 7);
-    this.b6Pawn = new Pawn('Black', 'F', 7);
-    this.b7Pawn = new Pawn('Black', 'G', 7);
-    this.b8Pawn = new Pawn('Black', 'H', 7);
+  init() {
+    this.cells = []
+    let color: Color;
+    for (let rank: Rank = 1; rank < 9; rank++) {
+      for (let file: NFile = 1; file < 9; file++) {
+        if (rank <= 2) {
+          color = 'White'
+          this.asignPieces(color, file as NFile, rank as Rank)
+        } else if (rank >= 7) {
+          color = 'Black'
+          this.asignPieces(color, file as NFile, rank as Rank)
+        }
+        // else {
+        //   this.cells.push(new Position(file as NFile, rank as Rank))
+        // }
+      }
+    }
+  }
+
+  private asignPieces(color: Color, file: NFile, rank: Rank) {
+    if (rank == 1 || rank == 8) {
+      if (file == 1 || file == 8) {
+        this.cells.push(/* new Position(file, rank, */ new Rook(color, new Position(file, rank)))
+      } else if (file == 2 || file == 7) {
+        this.cells.push(/* new Position(file, rank, */ new Knight(color, new Position(file, rank)))
+      } else if (file == 3 || file == 6) {
+        this.cells.push(/* new Position(file, rank, */ new Bishop(color, new Position(file, rank)))
+      } else if (file == 4) {
+        this.cells.push(/* new Position(file, rank, */ new Queen(color, new Position(file, rank)))
+      } else {
+        this.cells.push(/* new Position(file, rank, */ new King(color, new Position(file, rank)))
+      }
+    } else if (rank == 2 || rank == 7) {
+      this.cells.push(/* new Position(file, rank,  */new Pawn(color, new Position(file, rank)))
+    }
+  }
+
+  move(start: Position, end: Position) {
+    const piece = this.cells.find((piece) => piece.equalPosition(start))
+    if (!piece) throw new Error("Piece don't found on this position") 
+    piece.moveTo(end)
   }
 }

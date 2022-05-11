@@ -2,10 +2,9 @@ import mongoose, { Document, Types } from 'mongoose';
 const Schema = mongoose.Schema;
 
 interface Book extends Document {
-  _id: Types.ObjectId;
   author: string;
   title: string;
-  date?: Date;
+  date: Date;
 }
 const bookSchema = new Schema<Book>({
   author: {

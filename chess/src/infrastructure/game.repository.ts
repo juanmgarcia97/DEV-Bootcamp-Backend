@@ -1,9 +1,16 @@
 import Board from '../domain/board';
 import Game from '../domain/game';
+import { Position } from '../domain/position';
+import { Color } from '../domain/types';
 import IGameRepository from '../repository/igame.repository';
 
 export default class GameRepository implements IGameRepository {
   private game!: Game;
+  
+  movePiece(turn: Color, start: Position, end: Position): boolean {
+    let game = this.game
+    return game.movePiece(turn, start, end);
+  }
 
   getGame(): Game {
     return this.game;

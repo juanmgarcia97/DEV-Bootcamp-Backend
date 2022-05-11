@@ -28,15 +28,17 @@ class Test {
             book.date = new Date();
             book.title = 'design patterns';
             let createdBook = yield bookDatAccess.save(book);
-            console.log(createdBook);
+            // console.log(createdBook);
             let readedBook = yield bookDatAccess.read(createdBook.id);
-            readedBook.title = 'UPDATED';
-            yield bookDatAccess.update(readedBook._id, readedBook);
-            yield bookDatAccess.remove(readedBook._id);
-            const gridFS = new grid_fs_1.GridFS();
-            //await gridFS.upload('helloWorld.txt');
-            //await gridFS.upload('mongodb-windows-x86_64-5.0.8-signed.msi');
-            yield gridFS.download('mongodb-windows-x86_64-5.0.8-signed.msi');
+            if (readedBook != null) {
+                readedBook.title = 'UPDATED';
+                yield bookDatAccess.update(readedBook._id, readedBook);
+                yield bookDatAccess.remove(readedBook._id);
+                const gridFS = new grid_fs_1.GridFS();
+                //await gridFS.upload('helloWorld.txt');
+                //await gridFS.upload('mongodb-windows-x86_64-5.0.8-signed.msi');
+                yield gridFS.download('mongodb-windows-x86_64-5.0.8-signed.msi');
+            }
             //optional
             //await dbConnection.disconnect();
         });
