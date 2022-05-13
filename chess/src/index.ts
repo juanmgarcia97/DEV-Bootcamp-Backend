@@ -1,8 +1,8 @@
-import express, { json, NextFunction, Request, Response } from 'express';
+import express, { application, json, NextFunction, request, Request, Response } from 'express';
 import GameRepository from './infrastructure/game.repository';
 import Game from './domain/game';
 import { Position } from './domain/position';
-
+import {errorHandler} from './infrastructure/middlewares/error-handler'
 const app = express();
 const port = 3_000;
 
@@ -15,13 +15,22 @@ app.get('/', (request, response) => {
   response.send(repository.initGame());
 });
 
+app.get('/status', (request, response) => {
+  response.send(repository.getGame().status)
+})
+
 app.post('/move', async (request: Request, response: Response, next: NextFunction) => {
   const movement = await request.body
   const game: Game = repository.getGame()
   let message: string;
   let start = new Position(movement.start.file, movement.start.rank)
   let end = new Position(movement.end.file, movement.end.rank)
-  const moved = game.movePiece(movement.turn, start, end);
+  let moved;
+  try {
+    moved = game.movePiece(movement.turn, start, end);
+  } catch (error) {
+    next(error)
+  }
   if(moved) {
     message = "The piece has moved correctly"
     response.send({
@@ -40,9 +49,11 @@ app.post('/reset', (request, response) => {
   repository.resetGame()
   response.status(200).send({
     message: "Game reset",
-    body: repository.getGame()
+    body: repository.getGame().status
   })
 })
+
+app.use(errorHandler)
 
 app.listen(port, () => {
   console.log(`Server listening on port: ${port}`);

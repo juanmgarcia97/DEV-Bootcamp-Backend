@@ -6,7 +6,7 @@ import Queen from './queen';
 import Rook from './rook';
 import Piece from './piece';
 import { Position } from './position';
-import { Rank, File, Color, NFile } from './types';
+import { Rank, Color, NFile } from './types';
 
 export default class Board {
   private cells!: Piece[];
@@ -19,7 +19,7 @@ export default class Board {
     return this.cells;
   }
 
-  init() {
+  init(): void {
     this.cells = []
     let color: Color;
     for (let rank: Rank = 1; rank < 9; rank++) {
@@ -35,7 +35,7 @@ export default class Board {
     }
   }
 
-  private asignPieces(color: Color, file: NFile, rank: Rank) {
+  private asignPieces(color: Color, file: NFile, rank: Rank): void {
     if (rank == 1 || rank == 8) {
       if (file == 1 || file == 8) {
         this.cells.push(new Rook(color, new Position(file, rank)))
@@ -53,9 +53,21 @@ export default class Board {
     }
   }
 
-  move(start: Position, end: Position) {
-    const piece = this.cells.find((piece) => piece.equalPosition(start))
-    if (!piece) throw new Error("Piece don't found on this position") 
+  getPiece(position: Position): Piece {
+    const piece = this.cells.find((piece) => piece.equalPosition(position))
+    if (!piece) throw new Error("Piece don't found on this position");
+    return piece;
+  }
+
+  checkJaqueMate(color: Color, start: Position, end: Position): boolean {
+    const piece = this.getPiece(start)
+    const opositePieces = this.cells.filter(piece => piece.getColor !== color)
+    return opositePieces.some(value => value.canMoveTo(end) && piece.getType === 'King')
+  }
+
+  move(start: Position, end: Position): void {
+    const piece = this.getPiece(start)
+    if(!piece.canMoveTo(end))
     piece.moveTo(end)
   }
 }

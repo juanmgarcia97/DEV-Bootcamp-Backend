@@ -7,7 +7,7 @@ export default interface IGameRepository {
   resetGame(): void;
   loadGame(id: number): Game;
   finishGame(game: Game): void;
-  initGame(): Game;
+  initGame(): object;
   getGame(): Game;
   movePiece(turn: Color, start: Position, end: Position): boolean;
 }

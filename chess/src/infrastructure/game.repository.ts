@@ -16,10 +16,10 @@ export default class GameRepository implements IGameRepository {
     return this.game;
   }
 
-  initGame(): Game {
+  initGame() {
     let board = new Board();
     this.game = new Game(board);
-    return this.game;
+    return this.game.status;
   }
   saveGame(game: Game): void {
     throw new Error('Method not implemented.');

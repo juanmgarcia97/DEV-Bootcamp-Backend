@@ -13,6 +13,10 @@ export default abstract class Piece {
     return this.position;
   }
 
+  get getType() {
+    return this.type;
+  }
+
   get getColor() {
     return this.color;
   }
