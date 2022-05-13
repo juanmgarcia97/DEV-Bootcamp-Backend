@@ -51,11 +51,11 @@ export default class Game {
   }
 
   movePiece(turn: Color, start: Position, end: Position) {
-    if(this.state === 'Ready') this.state = 'Playing';
     if (turn === this.turn) {
-      if(this.board.checkJaqueMate(turn, start, end)) throw new Error("You can't expose your king to jaque mate")
+      if(this.board.checkMate(turn, start, end)) throw new Error("You can't expose your king to check mate")
       this.board.move(start, end);
       this.changeTurn();
+      if(this.state === 'Ready') this.state = 'Playing';
       return true;
     }
     return false;

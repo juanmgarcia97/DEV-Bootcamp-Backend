@@ -59,7 +59,7 @@ export default class Board {
     return piece;
   }
 
-  checkJaqueMate(color: Color, start: Position, end: Position): boolean {
+  checkMate(color: Color, start: Position, end: Position): boolean {
     const piece = this.getPiece(start)
     const opositePieces = this.cells.filter(piece => piece.getColor !== color)
     return opositePieces.some(value => value.canMoveTo(end) && piece.getType === 'King')
