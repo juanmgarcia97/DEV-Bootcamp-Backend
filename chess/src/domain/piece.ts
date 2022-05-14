@@ -1,5 +1,5 @@
 import { Position } from './position';
-import { Color, File, Rank, Type } from './types';
+import { Color, Type } from './types';
 
 export default abstract class Piece {
   protected type!: Type;
@@ -23,7 +23,6 @@ export default abstract class Piece {
 
   moveTo(position: Position) {
     this.position = position;
-    // this.position.setPiece(this)
   }
 
   equalPosition(position: Position) {

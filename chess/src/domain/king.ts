@@ -1,6 +1,6 @@
 import Piece from './piece';
 import { Position } from './position';
-import { Color, Rank, File, Type } from './types';
+import { Color } from './types';
 
 export default class King extends Piece {
   constructor(color: Color, position: Position) {
@@ -9,15 +9,13 @@ export default class King extends Piece {
     this.alive = true
   }
   canMoveTo(position: Position): boolean {
+    const oneStep = 1
     return (
-      Math.abs(this.position.getRank - position.getRank) <= 1 &&
+      Math.abs(this.position.getRank - position.getRank) <= oneStep &&
       Math.abs(
         this.position.getFile.charCodeAt(0) - position.getFile.charCodeAt(0)
-      ) <= 1 &&
-      !(
-        this.position.getFile == position.getFile &&
-        this.position.getRank == position.getRank
-      )
+      ) <= oneStep &&
+      !(this.equalPosition(position))
     );
   }
 }

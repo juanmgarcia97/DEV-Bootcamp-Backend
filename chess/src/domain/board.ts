@@ -7,19 +7,21 @@ import Rook from './rook';
 import Piece from './piece';
 import { Position } from './position';
 import { Rank, Color, NFile } from './types';
+import InvalidPieceMovement from './exceptions/invalidPieceMovement';
+import PieceNotFound from './exceptions/pieceNotFound';
 
 export default class Board {
   private cells!: Piece[];
 
   constructor() {
-    this.init()
+    this.initBoard()
   }
 
   get getBoard() {
     return this.cells;
   }
 
-  init(): void {
+  private initBoard(): void {
     this.cells = []
     let color: Color;
     for (let rank: Rank = 1; rank < 9; rank++) {
@@ -53,21 +55,21 @@ export default class Board {
     }
   }
 
-  getPiece(position: Position): Piece {
+  findPiece(position: Position): Piece {
     const piece = this.cells.find((piece) => piece.equalPosition(position))
-    if (!piece) throw new Error("Piece don't found on this position");
+    if (!piece) throw new PieceNotFound();
     return piece;
   }
 
   checkMate(color: Color, start: Position, end: Position): boolean {
-    const piece = this.getPiece(start)
+    const piece = this.findPiece(start)
     const opositePieces = this.cells.filter(piece => piece.getColor !== color)
-    return opositePieces.some(value => value.canMoveTo(end) && piece.getType === 'King')
+    return opositePieces.some(oposite => oposite.canMoveTo(end) && piece.getType === 'King')
   }
 
   move(start: Position, end: Position): void {
-    const piece = this.getPiece(start)
-    if(!piece.canMoveTo(end))
+    const piece = this.findPiece(start)
+    if (!piece.canMoveTo(end)) throw new InvalidPieceMovement(piece.getType);
     piece.moveTo(end)
   }
 }

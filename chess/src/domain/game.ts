@@ -2,6 +2,7 @@ import Board from './board';
 import Player from './player';
 import { Position } from './position';
 import { Color, State } from './types';
+import KingExposed from './exceptions/kingExposed';
 
 export default class Game {
   private player1!: Player;
@@ -52,7 +53,7 @@ export default class Game {
 
   movePiece(turn: Color, start: Position, end: Position) {
     if (turn === this.turn) {
-      if(this.board.checkMate(turn, start, end)) throw new Error("You can't expose your king to check mate")
+      if(this.board.checkMate(turn, start, end)) throw new KingExposed();
       this.board.move(start, end);
       this.changeTurn();
       if(this.state === 'Ready') this.state = 'Playing';

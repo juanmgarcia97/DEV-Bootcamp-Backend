@@ -1,6 +1,6 @@
 import Piece from './piece';
 import { Position } from './position';
-import { Color, Rank, File, Type } from './types';
+import { Color } from './types';
 
 export default class Bishop extends Piece {
   constructor(color: Color, position: Position) {
@@ -10,8 +10,7 @@ export default class Bishop extends Piece {
   }
   canMoveTo(position: Position): boolean {
     if (
-      this.position.getFile === position.getFile &&
-      this.position.getRank === position.getRank
+      this.equalPosition(position)
     )
       return false;
     return (
