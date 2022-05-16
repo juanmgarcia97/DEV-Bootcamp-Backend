@@ -2,23 +2,18 @@ import Piece from './piece';
 import { File, Rank, NFile } from './types';
 
 export class Position {
+
   private file: File;
 
   constructor(file: File | NFile, private rank: Rank) {
-    if(typeof file === 'number')
-      this.file = String.fromCharCode(file + 64) as File
-    else
+    const charCodeBeforeA: number = 64;
+    if (typeof file === 'number') {
+      this.file = file < charCodeBeforeA ?
+        String.fromCharCode(file + charCodeBeforeA) as File :
+        String.fromCharCode(file) as File;
+    } else
       this.file = file;
-    // this.piece = piece;
   }
-
-  // setPiece(piece: Piece) {
-  //   this.piece = piece;
-  // }
-
-  // get getPiece() {
-  //   return this.piece;
-  // }
 
   get getFile() {
     return this.file;

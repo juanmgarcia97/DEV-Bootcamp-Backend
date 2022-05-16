@@ -1,5 +1,5 @@
 import { Position } from './position';
-import { Color, Type } from './types';
+import { Color, Type, NFile, Rank } from './types';
 
 export default abstract class Piece {
   protected type!: Type;
@@ -21,7 +21,7 @@ export default abstract class Piece {
     return this.color;
   }
 
-  moveTo(position: Position) {
+  moveTo(position: Position): void {
     this.position = position;
   }
 
@@ -31,4 +31,5 @@ export default abstract class Piece {
   }
 
   abstract canMoveTo(position: Position): boolean;
+
 }
