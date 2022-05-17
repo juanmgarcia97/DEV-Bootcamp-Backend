@@ -57,4 +57,44 @@ describe('Check Mate Tests', () => {
       expect(error).toBeInstanceOf(KingExposed);
     }
   });
+
+  it('Should avoid the check by blocking piece', () => {
+    const board = new Board();
+    const game = new Game(board);
+    let startWhite = new Position('D', 2);
+    let endWhite = new Position('D', 3);
+    game.movePiece('White', startWhite, endWhite);
+    let startBlack = new Position('C', 7);
+    let endBlack = new Position('C', 6);
+    game.movePiece('Black', startBlack, endBlack);
+    startWhite = new Position('E', 2);
+    endWhite = new Position('E', 3);
+    game.movePiece('White', startWhite, endWhite);
+    startBlack = new Position('D', 8);
+    endBlack = new Position('A', 5);
+    game.movePiece('Black', startBlack, endBlack);
+    startWhite = new Position('D', 1);
+    endWhite = new Position('D', 2);
+    game.movePiece('White', startWhite, endWhite);
+  });
+
+  it('Should avoid the check by moving the king to safe space', () => {
+    const board = new Board();
+    const game = new Game(board);
+    let startWhite = new Position('D', 2);
+    let endWhite = new Position('D', 3);
+    game.movePiece('White', startWhite, endWhite);
+    let startBlack = new Position('C', 7);
+    let endBlack = new Position('C', 6);
+    game.movePiece('Black', startBlack, endBlack);
+    startWhite = new Position('E', 2);
+    endWhite = new Position('E', 3);
+    game.movePiece('White', startWhite, endWhite);
+    startBlack = new Position('D', 8);
+    endBlack = new Position('A', 5);
+    game.movePiece('Black', startBlack, endBlack);
+    startWhite = new Position('E', 1);
+    endWhite = new Position('E', 2);
+    game.movePiece('White', startWhite, endWhite);
+  });
 });
