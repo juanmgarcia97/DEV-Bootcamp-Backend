@@ -2,7 +2,7 @@ import { Position } from '../../src/domain/position';
 import Bishop from '../../src/domain/bishop';
 
 describe('Bishop Tests', () => {
-  let bishop = new Bishop('White', new Position('D', 1));
+  const bishop = new Bishop('White', new Position('D', 1));
 
   it('Should move diagonally', () => {
     let position = new Position('H', 5);
@@ -12,7 +12,7 @@ describe('Bishop Tests', () => {
   });
 
   it('Should not move vertically', () => {
-    let position = new Position('D', 8);
+    const position = new Position('D', 8);
     expect(bishop.canMoveTo(position)).toBe(false);
   });
 
@@ -29,7 +29,7 @@ describe('Bishop Tests', () => {
   });
 
   it('Should not move other places', () => {
-    let position = new Position('C', 5);
+    const position = new Position('C', 5);
     expect(bishop.canMoveTo(position)).toBe(false);
   });
 

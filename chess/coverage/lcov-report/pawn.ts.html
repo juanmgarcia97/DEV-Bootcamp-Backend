@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for queen.ts</title>
+    <title>Code coverage report for pawn.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="prettify.css" />
     <link rel="stylesheet" href="base.css" />
@@ -19,20 +19,20 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="index.html">All files</a> queen.ts</h1>
+        <h1><a href="index.html">All files</a> pawn.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>10/10</span>
+                <span class='fraction'>14/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>5/5</span>
+                <span class='fraction'>4/6</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>9/9</span>
+                <span class='fraction'>14/14</span>
             </div>
         
             
@@ -92,44 +92,44 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">9x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">9x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">9x</span>
-<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import Piece from './piece';
 import { Position } from './position';
 import { Color } from './types';
 &nbsp;
-export default class Queen extends Piece {
+export default class Pawn extends Piece {
   constructor(color: Color, position: Position) {
     super(color, position);
-    this.type = 'Queen';
+    this.type = 'Pawn';
     this.alive = true
   }
   canMoveTo(position: Position): boolean {
-    const bishopMovement =
-      Math.abs(this.position.getRank - position.getRank) ==
-      Math.abs(
-        this.position.getFile.charCodeAt(0) - position.getFile.charCodeAt(0)
-      );
-    const rookMovement =
-      this.position.getRank === position.getRank ||
-      this.position.getFile.charCodeAt(0) === position.getFile.charCodeAt(0);
-    if (this.equalPosition(position)) return false;
-    return bishopMovement || rookMovement;
+    const initialBlack = position.getRank === 7
+    const initialWhite = position.getRank === 2
+    const moveBlack = -1
+    const moveWhite = 1
+    const oneStepWhite = this.position.getRank + moveWhite === position.getRank
+    const twoStepWhite = this.position.getRank + moveWhite * 2 === position.getRank
+    const oneStepBlack = this.position.getRank + moveBlack === position.getRank
+    const twoStepBlack = this.position.getRank + moveBlack * 2 === position.getRank
+&nbsp;
+    return (initialBlack &amp;&amp; (oneStepBlack || twoStepBlack)) || (initialWhite &amp;&amp; (<span class="branch-4 cbranch-no" title="branch not covered" >oneStepWhite </span>|| <span class="branch-5 cbranch-no" title="branch not covered" >twoStepWhite)</span>)
   }
 }
 &nbsp;</pre></td></tr></table></pre>

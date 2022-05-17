@@ -11,12 +11,12 @@ export default class Pawn extends Piece {
   canMoveTo(position: Position): boolean {
     const initialBlack = position.getRank === 7
     const initialWhite = position.getRank === 2
-    const moveBlack = -1
-    const moveWhite = 1
-    const oneStepWhite = this.position.getRank + moveWhite === position.getRank
-    const twoStepWhite = this.position.getRank + moveWhite * 2 === position.getRank
-    const oneStepBlack = this.position.getRank + moveBlack === position.getRank
-    const twoStepBlack = this.position.getRank + moveBlack * 2 === position.getRank
+    const directionBlack = -1
+    const directionWhite = 1
+    const oneStepWhite = this.position.getRank + directionWhite === position.getRank
+    const twoStepWhite = this.position.getRank + directionWhite * 2 === position.getRank
+    const oneStepBlack = this.position.getRank + directionBlack === position.getRank
+    const twoStepBlack = this.position.getRank + directionBlack * 2 === position.getRank
 
     return (initialBlack && (oneStepBlack || twoStepBlack)) || (initialWhite && (oneStepWhite || twoStepWhite))
   }

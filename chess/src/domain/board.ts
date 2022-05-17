@@ -134,7 +134,7 @@ export default class Board {
   checkMate(color: Color, start: Position, end: Position): boolean {
     const piece = this.findPiece(start)
     const opositePieces = this.cells.filter(piece => piece.getColor !== color)
-    return opositePieces.some(oposite => oposite.canMoveTo(end) && piece.getType === 'King')
+    return opositePieces.some(oposite => oposite.canMoveTo(end) && oposite.canMoveTo(start) && piece.getType === 'King')
   }
 
   move(start: Position, end: Position): void {
