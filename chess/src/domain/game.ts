@@ -3,6 +3,7 @@ import Player from './player';
 import { Position } from './position';
 import { Color, State } from './types';
 import KingExposed from './exceptions/kingExposed';
+import InvalidTurn from './exceptions/invalidTurn';
 
 export default class Game {
   private player1!: Player;
@@ -11,7 +12,7 @@ export default class Game {
   private state!: State;
 
   constructor(private board: Board) {
-    this.initPlayers()
+    this.initPlayers();
   }
 
   get getBoard(): Board {
@@ -31,7 +32,7 @@ export default class Game {
         player2: this.player2,
       },
       board: this.board,
-    }
+    };
   }
 
   changeTurn() {
@@ -53,12 +54,12 @@ export default class Game {
 
   movePiece(turn: Color, start: Position, end: Position) {
     if (turn === this.turn) {
-      if(this.board.checkMate(turn, start, end)) throw new KingExposed();
+      if (this.board.checkMate(turn, start, end)) throw new KingExposed();
       this.board.move(start, end);
       this.changeTurn();
-      if(this.state === 'Ready') this.state = 'Playing';
-      return true;
+      if (this.state === 'Ready') this.state = 'Playing';
+    } else {
+      throw new InvalidTurn();
     }
-    return false;
   }
 }

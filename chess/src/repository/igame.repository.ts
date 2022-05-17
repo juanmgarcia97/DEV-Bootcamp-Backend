@@ -9,5 +9,5 @@ export default interface IGameRepository {
   finishGame(game: Game): void;
   initGame(): object;
   getGame(): Game;
-  movePiece(turn: Color, start: Position, end: Position): boolean;
+  movePiece(turn: Color, start: Position, end: Position): void;
 }

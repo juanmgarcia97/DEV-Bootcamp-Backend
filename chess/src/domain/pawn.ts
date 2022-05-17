@@ -6,18 +6,27 @@ export default class Pawn extends Piece {
   constructor(color: Color, position: Position) {
     super(color, position);
     this.type = 'Pawn';
-    this.alive = true
+    this.alive = true;
   }
   canMoveTo(position: Position): boolean {
-    const initialBlack = position.getRank === 7
-    const initialWhite = position.getRank === 2
-    const directionBlack = -1
-    const directionWhite = 1
-    const oneStepWhite = this.position.getRank + directionWhite === position.getRank
-    const twoStepWhite = this.position.getRank + directionWhite * 2 === position.getRank
-    const oneStepBlack = this.position.getRank + directionBlack === position.getRank
-    const twoStepBlack = this.position.getRank + directionBlack * 2 === position.getRank
+    const initialBlack = this.position.getRank === 7;
+    const initialWhite = this.position.getRank === 2;
+    const directionMove = this.getColor === 'Black' ? -1 : 1;
+    const oneStepWhite =
+      this.position.getRank + directionMove === position.getRank;
+    const twoStepWhite =
+      this.position.getRank + directionMove * 2 === position.getRank;
+    const oneStepBlack =
+      this.position.getRank + directionMove === position.getRank;
+    const twoStepBlack =
+      this.position.getRank + directionMove * 2 === position.getRank;
 
-    return (initialBlack && (oneStepBlack || twoStepBlack)) || (initialWhite && (oneStepWhite || twoStepWhite))
+    return (
+      this.position.getFile === position.getFile &&
+      (oneStepBlack ||
+        (initialBlack && twoStepBlack) ||
+        oneStepWhite ||
+        (initialWhite && twoStepWhite))
+    );
   }
 }

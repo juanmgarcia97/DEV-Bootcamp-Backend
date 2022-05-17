@@ -16,12 +16,12 @@ export default class GameService {
     return this.gameRepository.getGame();
   }
 
-  initGame(): Game {
-    return this.gameRepository.initGame()
+  initGame() {
+    return this.gameRepository.initGame();
   }
 
-  movePiece(turn: Color, start: Position, end: Position): boolean {
-    return this.gameRepository.movePiece(turn, start, end);
+  movePiece(turn: Color, start: Position, end: Position): void {
+    this.gameRepository.movePiece(turn, start, end);
   }
   // saveGame(game: Game): void {
   //   this.gameRepository.saveGame(game);

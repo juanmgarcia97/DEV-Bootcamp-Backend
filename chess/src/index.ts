@@ -1,8 +1,15 @@
-import express, { application, json, NextFunction, request, Request, Response } from 'express';
+import express, {
+  application,
+  json,
+  NextFunction,
+  request,
+  Request,
+  Response,
+} from 'express';
 import GameRepository from './infrastructure/game.repository';
 import Game from './domain/game';
 import { Position } from './domain/position';
-import {errorHandler} from './infrastructure/middlewares/error-handler'
+import { errorHandler } from './infrastructure/middlewares/error-handler';
 const app = express();
 const port = 3_000;
 
@@ -16,44 +23,37 @@ app.get('/', (request, response) => {
 });
 
 app.get('/status', (request, response) => {
-  response.send(repository.getGame().status)
-})
+  response.send(repository.getGame().status);
+});
 
-app.post('/move', async (request: Request, response: Response, next: NextFunction) => {
-  const movement = await request.body
-  const game: Game = repository.getGame()
-  let message: string;
-  let start = new Position(movement.start.file, movement.start.rank)
-  let end = new Position(movement.end.file, movement.end.rank)
-  let moved;
-  try {
-    moved = game.movePiece(movement.turn, start, end);
-  } catch (error) {
-    next(error)
+app.post(
+  '/move',
+  async (request: Request, response: Response, next: NextFunction) => {
+    const movement = await request.body;
+    const game: Game = repository.getGame();
+    const start = new Position(movement.start.file, movement.start.rank);
+    const end = new Position(movement.end.file, movement.end.rank);
+    try {
+      game.movePiece(movement.turn, start, end);
+      response.send({
+        message: 'The piece has moved correctly',
+        game: game.status,
+      });
+    } catch (error) {
+      next(error);
+    }
   }
-  if(moved) {
-    message = "The piece has moved correctly"
-    response.send({
-      message,
-      game: game.status
-    })
-  } else {
-    message = "Invalid move, it's not your turn"
-    response.status(400).send({
-      message,
-    })
-  }
-})
+);
 
 app.post('/reset', (request, response) => {
-  repository.resetGame()
+  repository.resetGame();
   response.status(200).send({
-    message: "Game reset",
-    body: repository.getGame().status
-  })
-})
+    message: 'Game reset',
+    body: repository.getGame().status,
+  });
+});
 
-app.use(errorHandler)
+app.use(errorHandler);
 
 app.listen(port, () => {
   console.log(`Server listening on port: ${port}`);

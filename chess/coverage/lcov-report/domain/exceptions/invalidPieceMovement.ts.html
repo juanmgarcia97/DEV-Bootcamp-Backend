@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">28.57% </span>
+                <span class="strong">4.76% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>6/21</span>
+                <span class='fraction'>1/21</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">16.66% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/6</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>0/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">28.57% </span>
+                <span class="strong">4.76% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/21</span>
+                <span class='fraction'>1/21</span>
             </div>
         
             
@@ -94,12 +94,8 @@
 <a name='L29'></a><a href='#L29'>29</a>
 <a name='L30'></a><a href='#L30'>30</a>
 <a name='L31'></a><a href='#L31'>31</a>
-<a name='L32'></a><a href='#L32'>32</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L32'></a><a href='#L32'>32</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -119,40 +115,44 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">export default class InvalidPieceMovement extends Error {
-    constructor(pieceType: string) {
-        let invalidMessage = 'Invalid move. Your ';
-        switch(pieceType) {
-<span class="branch-0 cbranch-no" title="branch not covered" >            case 'King':</span>
+<span class="fstat-no" title="function not covered" >    constructor(p</span>ieceType: string) {
+        let invalidMessage = <span class="cstat-no" title="statement not covered" >'Invalid move. Your ';</span>
+<span class="cstat-no" title="statement not covered" >        switch(pieceType) {</span>
+            case 'King':
 <span class="cstat-no" title="statement not covered" >                invalidMessage += pieceType;</span>
 <span class="cstat-no" title="statement not covered" >                super(`${invalidMessage} only can move 1 space in any direction.`);</span>
 <span class="cstat-no" title="statement not covered" >                break;</span>
-<span class="branch-1 cbranch-no" title="branch not covered" >            case 'Queen':</span>
+            case 'Queen':
 <span class="cstat-no" title="statement not covered" >                invalidMessage += pieceType;</span>
 <span class="cstat-no" title="statement not covered" >                super(`${invalidMessage} can move horizontally, vertically and diagonally but can't jump pieces.`);</span>
 <span class="cstat-no" title="statement not covered" >                break;</span>
-<span class="branch-2 cbranch-no" title="branch not covered" >            case 'Knight':</span>
+            case 'Knight':
 <span class="cstat-no" title="statement not covered" >                invalidMessage += pieceType;</span>
 <span class="cstat-no" title="statement not covered" >                super(`${invalidMessage} only can move L.`);</span>
 <span class="cstat-no" title="statement not covered" >                break;</span>
-<span class="branch-3 cbranch-no" title="branch not covered" >            case 'Bishop':</span>
+            case 'Bishop':
 <span class="cstat-no" title="statement not covered" >                invalidMessage += pieceType;</span>
 <span class="cstat-no" title="statement not covered" >                super(`${invalidMessage} only can move diagonally but can't jump pieces.`);</span>
 <span class="cstat-no" title="statement not covered" >                break;</span>
-<span class="branch-4 cbranch-no" title="branch not covered" >            case 'Rook':</span>
+            case 'Rook':
 <span class="cstat-no" title="statement not covered" >                invalidMessage += pieceType;</span>
 <span class="cstat-no" title="statement not covered" >                super(`${invalidMessage} can move horizontally and vertically but can't jump pieces.`);</span>
 <span class="cstat-no" title="statement not covered" >                break;</span>
             case 'Pawn':
-                invalidMessage += pieceType;
-                super(`${invalidMessage} can move forward but can't jump pieces.`);
-                break;
+<span class="cstat-no" title="statement not covered" >                invalidMessage += pieceType;</span>
+<span class="cstat-no" title="statement not covered" >                super(`${invalidMessage} can move forward but can't jump pieces.`);</span>
+<span class="cstat-no" title="statement not covered" >                break;</span>
 &nbsp;
         }
     }
@@ -163,7 +163,7 @@
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at Mon May 16 2022 20:23:27 GMT-0500 (hora estándar de Colombia)
+                at Tue May 17 2022 14:12:39 GMT-0500 (hora estándar de Colombia)
             </div>
         <script src="../../prettify.js"></script>
         <script>

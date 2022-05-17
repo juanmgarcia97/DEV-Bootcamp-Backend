@@ -6,10 +6,10 @@ import IGameRepository from '../repository/igame.repository';
 
 export default class GameRepository implements IGameRepository {
   private game!: Game;
-  
-  movePiece(turn: Color, start: Position, end: Position): boolean {
-    let game = this.game
-    return game.movePiece(turn, start, end);
+
+  movePiece(turn: Color, start: Position, end: Position): void {
+    let game = this.game;
+    game.movePiece(turn, start, end);
   }
 
   getGame(): Game {
@@ -25,8 +25,8 @@ export default class GameRepository implements IGameRepository {
     throw new Error('Method not implemented.');
   }
   resetGame(): void {
-    this.game.setBoard = new Board()
-    this.game.initPlayers()
+    this.game.setBoard = new Board();
+    this.game.initPlayers();
   }
   loadGame(id: number): Game {
     throw new Error('Method not implemented.');
