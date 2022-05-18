@@ -6,10 +6,11 @@ import express, {
   Request,
   Response,
 } from 'express';
-import GameRepository from './infrastructure/game.repository';
+import GameRepository from './infrastructure/game.repository.imp';
 import Game from './domain/game';
 import { Position } from './domain/position';
 import { errorHandler } from './infrastructure/middlewares/error-handler';
+import Movement from './domain/movement';
 const app = express();
 const port = 3_000;
 
@@ -33,8 +34,9 @@ app.post(
     const game: Game = repository.getGame();
     const start = new Position(movement.start.file, movement.start.rank);
     const end = new Position(movement.end.file, movement.end.rank);
+    const movementObject = new Movement(start, end);
     try {
-      game.movePiece(movement.turn, start, end);
+      game.movePiece(movement.turn, movementObject);
       response.send({
         message: 'The piece has moved correctly',
         game: game.status,

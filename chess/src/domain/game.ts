@@ -4,6 +4,7 @@ import { Position } from './position';
 import { Color, State } from './types';
 import KingExposed from './exceptions/kingExposed';
 import InvalidTurn from './exceptions/invalidTurn';
+import Movement from './movement';
 
 export default class Game {
   private player1!: Player;
@@ -52,10 +53,10 @@ export default class Game {
     this.state = 'Ready';
   }
 
-  movePiece(turn: Color, start: Position, end: Position) {
+  movePiece(turn: Color, movement: Movement) {
     if (turn === this.turn) {
-      if (this.board.checkMate(turn, start, end)) throw new KingExposed();
-      this.board.move(start, end);
+      if (this.board.checkMate(turn, movement)) throw new KingExposed();
+      this.board.move(movement);
       this.changeTurn();
       if (this.state === 'Ready') this.state = 'Playing';
     } else {

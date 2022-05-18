@@ -1,5 +1,5 @@
 import Game from '../domain/game';
-import { Position } from '../domain/position';
+import Movement from '../domain/movement';
 import { Color } from '../domain/types';
 
 export default interface IGameRepository {
@@ -9,5 +9,5 @@ export default interface IGameRepository {
   finishGame(game: Game): void;
   initGame(): object;
   getGame(): Game;
-  movePiece(turn: Color, start: Position, end: Position): void;
+  movePiece(turn: Color, movement: Movement): void;
 }

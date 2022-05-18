@@ -1,6 +1,7 @@
 import Board from '../../src/domain/board';
 import BlockingPiece from '../../src/domain/exceptions/blockingPiece';
 import Game from '../../src/domain/game';
+import Movement from '../../src/domain/movement';
 import { Position } from '../../src/domain/position';
 
 describe('Blocking Pieces Tests', () => {
@@ -9,8 +10,9 @@ describe('Blocking Pieces Tests', () => {
     const game = new Game(board);
     const startPosition = new Position('A', 1);
     const endPosition = new Position('A', 3);
+    const movement = new Movement(startPosition, endPosition);
     try {
-      game.movePiece('White', startPosition, endPosition);
+      game.movePiece('White', movement);
     } catch (error) {
       expect(error).toBeInstanceOf(BlockingPiece);
     }
@@ -21,8 +23,9 @@ describe('Blocking Pieces Tests', () => {
     const game = new Game(board);
     const startPosition = new Position('C', 1);
     const endPosition = new Position('A', 3);
+    const movement = new Movement(startPosition, endPosition);
     try {
-      game.movePiece('White', startPosition, endPosition);
+      game.movePiece('White', movement);
     } catch (error) {
       expect(error).toBeInstanceOf(BlockingPiece);
     }
@@ -33,8 +36,9 @@ describe('Blocking Pieces Tests', () => {
     const game = new Game(board);
     const startPosition = new Position('D', 1);
     const endPosition = new Position('D', 3);
+    const movement = new Movement(startPosition, endPosition);
     try {
-      game.movePiece('White', startPosition, endPosition);
+      game.movePiece('White', movement);
     } catch (error) {
       expect(error).toBeInstanceOf(BlockingPiece);
     }
@@ -45,14 +49,17 @@ describe('Blocking Pieces Tests', () => {
     const game = new Game(board);
     let startPosition = new Position('A', 2);
     let endPosition = new Position('A', 4);
-    game.movePiece('White', startPosition, endPosition);
+    let movement = new Movement(startPosition, endPosition);
+    game.movePiece('White', movement);
     startPosition = new Position('A', 7);
     endPosition = new Position('A', 5);
-    game.movePiece('Black', startPosition, endPosition);
+    movement = new Movement(startPosition, endPosition);
+    game.movePiece('Black', movement);
     startPosition = new Position('A', 4);
     endPosition = new Position('A', 5);
+    movement = new Movement(startPosition, endPosition);
     try {
-      game.movePiece('White', startPosition, endPosition);
+      game.movePiece('White', movement);
     } catch (error) {
       expect(error).toBeInstanceOf(BlockingPiece);
     }
@@ -63,6 +70,7 @@ describe('Blocking Pieces Tests', () => {
     const game = new Game(board);
     const startPosition = new Position('B', 1);
     const endPosition = new Position('C', 3);
-    expect(game.movePiece('White', startPosition, endPosition)).toBe(undefined);
+    const movement = new Movement(startPosition, endPosition);
+    expect(game.movePiece('White', movement)).toBe(undefined);
   });
 });

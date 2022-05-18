@@ -10,6 +10,7 @@ import { Rank, Color, NFile, File } from './types';
 import InvalidPieceMovement from './exceptions/invalidPieceMovement';
 import PieceNotFound from './exceptions/pieceNotFound';
 import BlockingPiece from './exceptions/blockingPiece';
+import Movement from './movement';
 
 export default class Board {
   private cells!: Piece[];
@@ -68,92 +69,60 @@ export default class Board {
     return false;
   }
 
-  isPieceBlockingToMove(start: Position, end: Position): boolean {
-    const fileDifference =
-      start.getFile.charCodeAt(0) - end.getFile.charCodeAt(0);
-    const rankDifference = start.getRank - end.getRank;
-    const directionMovementFile =
-      fileDifference > 0 ? -1 : fileDifference < 0 ? 1 : 0;
-    const directionMovementRank =
-      rankDifference > 0 ? -1 : rankDifference < 0 ? 1 : 0;
-    const biggestMove =
-      Math.abs(fileDifference) - Math.abs(rankDifference) > 0
-        ? Math.abs(fileDifference)
-        : Math.abs(rankDifference);
-    let pieceBlocking = false;
-    // for (let rank = 1; rank < Math.abs(rankDifference); rank++) {
-    for (let pivot = 1; pivot < biggestMove; pivot++) {
-      const movingPosition = new Position(
-        (start.getFile.charCodeAt(0) + pivot * directionMovementFile) as NFile,
-        (start.getRank + pivot * directionMovementRank) as Rank
-      );
-      if (!this.isPositionFree(movingPosition)) pieceBlocking = true;
-    }
-    // }
-    // //Vertical move
-    // if (fileDifference === 0) {
-    //   //Move left
-    //   if (rankDifference > 0) {
-    //     for (let rank = 1; rank < rankDifference; rank++) {
-    //       const movingPosition = new Position(start.getFile, start.getRank + rank as Rank)
-    //       if (!this.isPositionFree(movingPosition)) pieceBlocking = true;
-    //     }
-    //     //Move right
-    //   } else {
-    //     for (let rank = 1; rank < Math.abs(rankDifference); rank++) {
-    //       const movingPosition = new Position(start.getFile, start.getRank - rank as Rank)
-    //       if (!this.isPositionFree(movingPosition)) pieceBlocking = true;
-    //     }
-    //   }
-    // }
-    // //Horizontal move
-    // if (rankDifference === 0) {
-    //   //Move left
-    //   if (fileDifference > 0) {
-    //     for (let file = 1; file < fileDifference; file++) {
-    //       const movingPosition = new Position(String.fromCharCode(start.getFile.charCodeAt(0) + file) as File, start.getRank);
-    //       if (!this.isPositionFree(movingPosition)) pieceBlocking = true;
-    //     }
-    //     //Move right
-    //   } else {
-    //     for (let file = 1; file < Math.abs(fileDifference); file++) {
-    //       const movingPosition = new Position(String.fromCharCode(start.getFile.charCodeAt(0) - file) as File, start.getRank);
-    //       if (!this.isPositionFree(movingPosition)) pieceBlocking = true;
-    //     }
-    //   }
-    // }
-    // //Diagonal move
-    // if (rankDifference > 0) {
-
-    // } else {
-    //   for (let rank = 1; rank < Math.abs(rankDifference); rank++) {
-    //     for (let file = 1; file < Math.abs(fileDifference); file++) {
-    //       const movingPosition = new Position(String.fromCharCode(start.getFile.charCodeAt(0) + file) as File, start.getRank + rank as Rank)
-    //       if (!this.isPositionFree(movingPosition)) pieceBlocking = true;
-    //     }
-    //   }
-    // }
-    return pieceBlocking;
+  getBiggestDifference(firstValue: number, secondValue: number): number {
+    return Math.max(Math.abs(firstValue), Math.abs(secondValue));
   }
 
-  checkMate(color: Color, start: Position, end: Position): boolean {
-    const piece = this.findPiece(start);
+  getMovementDirection(movement: number): number {
+    return movement > 0 ? -1 : movement < 0 ? 1 : 0;
+  }
+
+  getFileDifference(movement: Movement): number {
+    return movement.startFileNumber - movement.endFileNumber;
+  }
+
+  getRankDifference(movement: Movement): number {
+    return movement.startRank - movement.endRank;
+  }
+
+  isPieceBlockingToMove(movement: Movement): boolean {
+    const fileDifference = this.getFileDifference(movement);
+    const rankDifference = this.getRankDifference(movement);
+    const biggestMove = this.getBiggestDifference(
+      fileDifference,
+      rankDifference
+    );
+    for (let pivot = 1; pivot < biggestMove; pivot++) {
+      const movingPosition = new Position(
+        (movement.startFileNumber +
+          pivot * this.getMovementDirection(fileDifference)) as NFile,
+        (movement.startRank +
+          pivot * this.getMovementDirection(rankDifference)) as Rank
+      );
+      if (!this.isPositionFree(movingPosition)) return true;
+    }
+    return false;
+  }
+
+  checkMate(color: Color, movement: Movement): boolean {
+    const piece = this.findPiece(movement.start);
     const oppositePieces = this.cells.filter(
       (piece) => piece.getColor !== color
     );
     return oppositePieces.some(
       (opposite) =>
-        opposite.canMoveTo(end) &&
-        opposite.canMoveTo(start) &&
+        opposite.canMoveTo(movement.end) &&
+        opposite.canMoveTo(movement.start) &&
         piece.getType === 'King'
     );
   }
 
-  move(start: Position, end: Position): void {
-    const piece = this.findPiece(start);
-    if (!piece.canMoveTo(end)) throw new InvalidPieceMovement(piece.getType);
-    if (this.isPieceBlockingToMove(start, end) && piece.getType !== 'Knight')
+  move(movement: Movement): void {
+    const piece = this.findPiece(movement.start);
+    if (!piece.canMoveTo(movement.end))
+      throw new InvalidPieceMovement(piece.getType);
+    if (this.isPieceBlockingToMove(movement) && piece.getType !== 'Knight')
       throw new BlockingPiece();
-    piece.moveTo(end);
+    piece.moveTo(movement.end);
   }
 }
