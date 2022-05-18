@@ -2,7 +2,7 @@ import King from '../../src/domain/king';
 import { Position } from '../../src/domain/position';
 
 describe('King Tests', () => {
-  let king = new King('White', new Position('D', 4));
+  const king = new King('White', new Position('D', 4));
 
   it('Should move one place forward', () => {
     let position = new Position('D', 5);

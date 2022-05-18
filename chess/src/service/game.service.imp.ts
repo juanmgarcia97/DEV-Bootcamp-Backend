@@ -23,16 +23,8 @@ export default class GameServiceImp {
   movePiece(turn: Color, movement: Movement): void {
     this.gameRepository.movePiece(turn, movement);
   }
-  // saveGame(game: Game): void {
-  //   this.gameRepository.saveGame(game);
-  // }
+
   resetGame(): void {
     this.gameRepository.resetGame();
   }
-  // loadGame(id: number): Game {
-  //   return this.gameRepository.loadGame(id);
-  // }
-  // finishGame(game: Game): void {
-  //   this.gameRepository.finishGame(game);
-  // }
 }

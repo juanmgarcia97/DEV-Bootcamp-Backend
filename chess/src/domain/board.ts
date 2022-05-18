@@ -5,12 +5,12 @@ import Pawn from './pawn';
 import Queen from './queen';
 import Rook from './rook';
 import Piece from './piece';
-import { Position } from './position';
-import { Rank, Color, NFile, File } from './types';
+import {Position} from './position';
+import {Color, NFile, Rank} from './types';
 import InvalidPieceMovement from './exceptions/invalidPieceMovement';
-import PieceNotFound from './exceptions/pieceNotFound';
 import BlockingPiece from './exceptions/blockingPiece';
 import Movement from './movement';
+import PieceNotFound from "./exceptions/pieceNotFound";
 
 export default class Board {
   private cells!: Piece[];
@@ -57,31 +57,27 @@ export default class Board {
     }
   }
 
-  findPiece(position: Position): Piece {
-    const piece = this.cells.find((piece) => piece.equalPosition(position));
-    if (!piece) throw new PieceNotFound();
-    return piece;
+  private findPiece(position: Position): Piece | undefined {
+    return this.cells.find((piece) => piece.equalPosition(position));
   }
 
-  isPositionFree(position: Position): boolean {
-    const piece = this.cells.find((piece) => piece.equalPosition(position));
-    if (!piece) return true;
-    return false;
+  private isPositionFree(position: Position): boolean {
+    return !this.findPiece(position);
   }
 
-  getBiggestDifference(firstValue: number, secondValue: number): number {
+  private getBiggestDifference(firstValue: number, secondValue: number): number {
     return Math.max(Math.abs(firstValue), Math.abs(secondValue));
   }
 
-  getMovementDirection(movement: number): number {
+  private getMovementDirection(movement: number): number {
     return movement > 0 ? -1 : movement < 0 ? 1 : 0;
   }
 
-  getFileDifference(movement: Movement): number {
+  private getFileDifference(movement: Movement): number {
     return movement.startFileNumber - movement.endFileNumber;
   }
 
-  getRankDifference(movement: Movement): number {
+  private getRankDifference(movement: Movement): number {
     return movement.startRank - movement.endRank;
   }
 
@@ -106,6 +102,7 @@ export default class Board {
 
   checkMate(color: Color, movement: Movement): boolean {
     const piece = this.findPiece(movement.start);
+    if(!piece) throw new PieceNotFound();
     const oppositePieces = this.cells.filter(
       (piece) => piece.getColor !== color
     );
@@ -119,6 +116,7 @@ export default class Board {
 
   move(movement: Movement): void {
     const piece = this.findPiece(movement.start);
+    if(!piece) throw new PieceNotFound();
     if (!piece.canMoveTo(movement.end))
       throw new InvalidPieceMovement(piece.getType);
     if (this.isPieceBlockingToMove(movement) && piece.getType !== 'Knight')

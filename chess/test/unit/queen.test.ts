@@ -2,15 +2,15 @@ import { Position } from '../../src/domain/position';
 import Queen from '../../src/domain/queen';
 
 describe('Queen Tests', () => {
-  let queen = new Queen('White', new Position('D', 1));
+  const queen = new Queen('White', new Position('D', 1));
 
   it('Should move vertically', () => {
-    let position = new Position('D', 8);
+    const position = new Position('D', 8);
     expect(queen.canMoveTo(position)).toBe(true);
   });
 
   it('Should move horizontally', () => {
-    let position = new Position('A', 1);
+    const position = new Position('A', 1);
     expect(queen.canMoveTo(position)).toBe(true);
   });
 
@@ -36,7 +36,7 @@ describe('Queen Tests', () => {
   });
 
   it('Should not move to the same place', () => {
-    let position = new Position('D', 1);
+    const position = new Position('D', 1);
     expect(queen.canMoveTo(position)).toBe(false);
   });
 });

@@ -2,7 +2,7 @@ import { Position } from '../../src/domain/position';
 import Knight from '../../src/domain/knight';
 
 describe('Knight Tests', () => {
-  let knight = new Knight('White', new Position('D', 4));
+  const knight = new Knight('White', new Position('D', 4));
 
   it('Should move L', () => {
     let position = new Position('C', 2);

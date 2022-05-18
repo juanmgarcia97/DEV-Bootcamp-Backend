@@ -27,7 +27,6 @@ describe('Check Mate Tests', () => {
     start = new Position('E', 1);
     end = new Position('D', 2);
     movement = new Movement(start, end);
-    // expect(game.movePiece('White', movement)).toThrow(KingExposed);
     try {
       game.movePiece('White', movement);
     } catch (error) {
