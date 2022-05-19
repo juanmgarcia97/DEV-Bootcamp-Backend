@@ -1,7 +1,7 @@
 import Board from './board';
 import Player from './player';
 import { Position } from './position';
-import { Color, State } from './types';
+import { Color, GameStatus, State } from './types';
 import KingExposed from './exceptions/kingExposed';
 import InvalidTurn from './exceptions/invalidTurn';
 import Movement from './movement';
@@ -24,19 +24,20 @@ export default class Game {
     this.board = board;
   }
 
-  get status() {
-    return {
+  get status(): GameStatus {
+    const gameStatus: GameStatus = {
       state: this.state,
       turn: this.turn,
-      players: {
-        player1: this.player1,
-        player2: this.player2,
-      },
+      players: [
+        this.player1,
+        this.player2,
+      ],
       board: this.board,
-    };
+    }
+    return gameStatus;
   }
 
-  changeTurn() {
+  private changeTurn() {
     if (this.turn === 'White') {
       this.turn = 'Black';
       this.player1.passTurn(this.player2);
@@ -46,21 +47,27 @@ export default class Game {
     }
   }
 
-  initPlayers() {
+  private initPlayers() {
     this.player1 = new Player('Black', false);
     this.player2 = new Player('White', true);
     this.turn = 'White';
     this.state = 'Ready';
   }
 
+  private verifyTurn(turn: Color) {
+    if (turn !== this.turn) throw new InvalidTurn();
+  }
+
+  private verifyCheckMate(turn: Color, movement: Movement) {
+    if (this.board.checkMate(turn, movement)) throw new KingExposed();
+  }
+
   movePiece(turn: Color, movement: Movement) {
-    if (turn === this.turn) {
-      if (this.board.checkMate(turn, movement)) throw new KingExposed();
-      this.board.move(movement);
-      this.changeTurn();
-      if (this.state === 'Ready') this.state = 'Playing';
-    } else {
-      throw new InvalidTurn();
-    }
+    this.verifyTurn(turn);
+    this.verifyCheckMate(turn, movement);
+    this.board.move(movement);
+    if (this.state === 'Ready') this.state = 'Playing';
+    this.changeTurn();
   }
 }
+

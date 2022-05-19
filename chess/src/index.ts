@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import express, {
   application,
   json,
@@ -6,55 +7,27 @@ import express, {
   Request,
   Response,
 } from 'express';
+import { errorHandler } from './infrastructure/middlewares/error-handler';
+import GameController from './controllers/game.controller'
 import GameRepository from './infrastructure/game.repository.imp';
 import Game from './domain/game';
 import { Position } from './domain/position';
-import { errorHandler } from './infrastructure/middlewares/error-handler';
 import Movement from './domain/movement';
+import { InversifyExpressServer } from 'inversify-express-utils';
+// import container from '../inversify.config';
+import { Container } from 'inversify';
+import { TYPES } from './domain/types';
+import GameService from './service/game.service';
+
+
+// server.setErrorConfig((app) => {
+// })
+
 const app = express();
 const port = 3_000;
 
 app.use(json());
-
-let repository: GameRepository = new GameRepository();
-// let service: GameService = new GameService(repository);
-
-app.get('/', (request, response) => {
-  response.send(repository.initGame());
-});
-
-app.get('/status', (request, response) => {
-  response.send(repository.getGame().status);
-});
-
-app.post(
-  '/move',
-  async (request: Request, response: Response, next: NextFunction) => {
-    const movement = await request.body;
-    const game: Game = repository.getGame();
-    const start = new Position(movement.start.file, movement.start.rank);
-    const end = new Position(movement.end.file, movement.end.rank);
-    const movementObject = new Movement(start, end);
-    try {
-      game.movePiece(movement.turn, movementObject);
-      response.send({
-        message: 'The piece has moved correctly',
-        game: game.status,
-      });
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
-app.post('/reset', (request, response) => {
-  repository.resetGame();
-  response.status(200).send({
-    message: 'Game reset',
-    body: repository.getGame().status,
-  });
-});
-
+app.use('/api', GameController)
 app.use(errorHandler);
 
 app.listen(port, () => {

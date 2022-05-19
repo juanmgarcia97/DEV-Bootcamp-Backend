@@ -2,24 +2,24 @@ import { Color } from "./types";
 
 export default class Player {
     constructor(
-        private readonly _color: Color,
-        private _turn: boolean
+        private readonly color: Color,
+        private turn: boolean
     ) { }
 
-    get color() {
-        return this._color;
+    get getColor() {
+        return this.color;
     }
 
-    get turn() {
-        return this._turn;
+    get getTurn() {
+        return this.turn;
     }
 
-    protected set changeTurn(_turn: boolean) {
-        this._turn = _turn;
+    protected set changeTurn(turn: boolean) {
+        this.turn = turn;
     }
 
     passTurn(player: Player) {
-        this._turn = !this._turn;
-        player._turn = !player.turn;
+        this.turn = !this.turn;
+        player.turn = !player.turn;
     }
 }
