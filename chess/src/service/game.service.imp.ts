@@ -33,7 +33,9 @@ export default class GameServiceImp implements GameService {
 
   resetGame(): void {
     if (!this.game) throw new GameNotCreated('Reset');
+    const id = this.game.getGameId;
     this.game = new Game(new Board());
+    this.game.setGameId = id;
   }
 
   async saveGame(game: Game): Promise<Game> {
