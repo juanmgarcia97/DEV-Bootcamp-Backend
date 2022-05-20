@@ -6,13 +6,10 @@ export default class Bishop extends Piece {
   constructor(color: Color, position: Position) {
     super(color, position);
     this.type = 'Bishop';
-    this.alive = true
+    this.alive = true;
   }
   canMoveTo(position: Position): boolean {
-    if (
-      this.equalPosition(position)
-    )
-      return false;
+    if (this.equalPosition(position)) return false;
     return (
       Math.abs(this.position.getRank - position.getRank) ==
       Math.abs(

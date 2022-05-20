@@ -6,7 +6,7 @@ export default class Rook extends Piece {
   constructor(color: Color, position: Position) {
     super(color, position);
     this.type = 'Rook';
-    this.alive = true
+    this.alive = true;
   }
   canMoveTo(position: Position): boolean {
     if (this.equalPosition(position)) return false;

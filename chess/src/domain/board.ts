@@ -5,12 +5,12 @@ import Pawn from './pawn';
 import Queen from './queen';
 import Rook from './rook';
 import Piece from './piece';
-import {Position} from './position';
-import {Color, NFile, Rank} from './types';
+import { Position } from './position';
+import { Color, NFile, Rank } from './types';
 import InvalidPieceMovement from './exceptions/invalidPieceMovement';
 import BlockingPiece from './exceptions/blockingPiece';
 import Movement from './movement';
-import PieceNotFound from "./exceptions/pieceNotFound";
+import PieceNotFound from './exceptions/pieceNotFound';
 
 export default class Board {
   private cells!: Piece[];
@@ -25,36 +25,46 @@ export default class Board {
 
   private initBoard(): void {
     this.cells = [];
-    let color: Color;
-    for (let rank: Rank = 1; rank < 9; rank++) {
-      for (let file: NFile = 1; file < 9; file++) {
-        if (rank <= 2) {
-          color = 'White';
-          this.assignPieces(color, file as NFile, rank as Rank);
-        } else if (rank >= 7) {
-          color = 'Black';
-          this.assignPieces(color, file as NFile, rank as Rank);
-        }
+    const minNumber = 1;
+    const maxNumber = 8;
+    for (let rank: Rank = minNumber; rank <= maxNumber; rank++) {
+      for (let file: NFile = minNumber; file <= maxNumber; file++) {
+        rank <= 2
+          ? this.assignPieces(
+              'White',
+              new Position(file as NFile, rank as Rank)
+            )
+          : rank >= 7
+          ? this.assignPieces(
+              'Black',
+              new Position(file as NFile, rank as Rank)
+            )
+          : false;
       }
     }
   }
 
-  private assignPieces(color: Color, file: NFile, rank: Rank): void {
-    if (rank == 1 || rank == 8) {
-      if (file == 1 || file == 8) {
-        this.cells.push(new Rook(color, new Position(file, rank)));
-      } else if (file == 2 || file == 7) {
-        this.cells.push(new Knight(color, new Position(file, rank)));
-      } else if (file == 3 || file == 6) {
-        this.cells.push(new Bishop(color, new Position(file, rank)));
-      } else if (file == 4) {
-        this.cells.push(new Queen(color, new Position(file, rank)));
-      } else {
-        this.cells.push(new King(color, new Position(file, rank)));
-      }
-    } else if (rank == 2 || rank == 7) {
-      this.cells.push(new Pawn(color, new Position(file, rank)));
-    }
+  private assignPieces(color: Color, position: Position): void {
+    const pieces = {
+      1: Rook,
+      2: Knight,
+      3: Bishop,
+      4: Queen,
+      5: King,
+      6: Bishop,
+      7: Knight,
+      8: Rook,
+    };
+    const pawns = {
+      2: Pawn,
+      7: Pawn,
+    };
+    this.cells.push(new pieces[position.getNFile](color, position));
+    position.getRank === 2
+      ? this.cells.push(new pawns[position.getRank](color, position))
+      : position.getRank === 7
+      ? this.cells.push(new pawns[position.getRank](color, position))
+      : false;
   }
 
   private findPiece(position: Position): Piece | undefined {
@@ -65,7 +75,10 @@ export default class Board {
     return !this.findPiece(position);
   }
 
-  private getBiggestDifference(firstValue: number, secondValue: number): number {
+  private getBiggestDifference(
+    firstValue: number,
+    secondValue: number
+  ): number {
     return Math.max(Math.abs(firstValue), Math.abs(secondValue));
   }
 
@@ -100,9 +113,9 @@ export default class Board {
     return false;
   }
 
-  checkMate(color: Color, movement: Movement): boolean {
+  isKingInDanger(color: Color, movement: Movement): boolean {
     const piece = this.findPiece(movement.start);
-    if(!piece) throw new PieceNotFound();
+    if (!piece) throw new PieceNotFound();
     const oppositePieces = this.cells.filter(
       (piece) => piece.getColor !== color
     );
@@ -114,13 +127,29 @@ export default class Board {
     );
   }
 
-  move(movement: Movement): void {
-    const piece = this.findPiece(movement.start);
-    if(!piece) throw new PieceNotFound();
-    if (!piece.canMoveTo(movement.end))
+  private verifyPieceExists(position: Position): Piece {
+    const piece = this.findPiece(position);
+    if (!piece) throw new PieceNotFound();
+    return piece;
+  }
+
+  private verifyPieceCanMove(piece: Piece, position: Position): void {
+    if (!piece.canMoveTo(position))
       throw new InvalidPieceMovement(piece.getType);
+  }
+
+  private verifyIfOtherPieceIsBlockingWay(
+    piece: Piece,
+    movement: Movement
+  ): void {
     if (this.isPieceBlockingToMove(movement) && piece.getType !== 'Knight')
       throw new BlockingPiece();
+  }
+
+  movePiece(movement: Movement): void {
+    const piece = this.verifyPieceExists(movement.start);
+    this.verifyPieceCanMove(piece, movement.end);
+    this.verifyIfOtherPieceIsBlockingWay(piece, movement);
     piece.moveTo(movement.end);
   }
 }

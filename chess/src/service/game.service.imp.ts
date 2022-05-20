@@ -1,10 +1,11 @@
 import { injectable, inject } from 'inversify';
-import { Color, TYPES, GameStatus } from '../domain/types';
+import { Color, TYPES } from '../domain/types';
 import Game from '../domain/game';
 import IGameRepository from '../repository/game.repository';
 import Movement from '../domain/movement';
 import GameService from './game.service';
 import Board from '../domain/board';
+import GameNotCreated from '../domain/exceptions/gameNotCreated';
 
 @injectable()
 export default class GameServiceImp implements GameService {
@@ -19,25 +20,31 @@ export default class GameServiceImp implements GameService {
     this.game.movePiece(turn, movement);
   }
 
-  getGameStatus(): GameStatus {
+  getGameStatus(): Game {
+    if (!this.game) throw new GameNotCreated('Create');
     return this.game.status;
   }
 
-  initGame(): GameStatus {
+  initGame(): Game {
     const board = new Board();
     this.game = new Game(board);
     return this.game.status;
   }
 
   resetGame(): void {
-    this.game = new Game(new Board)
+    if (!this.game) throw new GameNotCreated('Reset');
+    this.game = new Game(new Board());
   }
 
-  saveGame(game: Game): void {
-    this.gameRepository.saveGame(game);
+  async saveGame(game: Game): Promise<Game> {
+    return await this.gameRepository.saveGame(game);
   }
 
-  loadGame(id: number): Game {
-    return this.gameRepository.loadGame(id);
+  async loadGame(id: string): Promise<Game> {
+    return await this.gameRepository.loadGame(id);
+  }
+
+  async deleteGame(id: string): Promise<void> {
+    await this.gameRepository.deleteGame(id);
   }
 }

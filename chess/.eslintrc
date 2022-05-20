@@ -6,10 +6,5 @@
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended"
-  ],
-  "rules": {
-    "no-console": "warn",
-    "semi": ["error", "always"],
-    "indent": ["error", 2]
-  }
+  ]
 }

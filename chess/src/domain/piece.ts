@@ -1,5 +1,5 @@
 import { Position } from './position';
-import { Color, Type, NFile, Rank } from './types';
+import { Color, Type } from './types';
 
 export default abstract class Piece {
   protected type!: Type;
@@ -26,10 +26,11 @@ export default abstract class Piece {
   }
 
   equalPosition(position: Position) {
-    return (this.position.getFile === position.getFile &&
-      this.position.getRank === position.getRank)
+    return (
+      this.position.getFile === position.getFile &&
+      this.position.getRank === position.getRank
+    );
   }
 
   abstract canMoveTo(position: Position): boolean;
-
 }

@@ -1,19 +1,66 @@
 import Board from './board';
 import Player from './player';
-import { Position } from './position';
-import { Color, GameStatus, State } from './types';
+import { Color, State } from './types';
 import KingExposed from './exceptions/kingExposed';
 import InvalidTurn from './exceptions/invalidTurn';
 import Movement from './movement';
+import { uuid } from 'uuidv4';
 
 export default class Game {
-  private player1!: Player;
-  private player2!: Player;
-  private turn!: Color;
-  private state!: State;
+  private gameId: string;
+  private player1: Player;
+  private player2: Player;
+  private turn: Color;
+  private state: State;
+  private board: Board;
 
-  constructor(private board: Board) {
-    this.initPlayers();
+  constructor(board: Board) {
+    this.gameId = uuid();
+    this.state = 'Ready';
+    this.turn = 'White';
+    this.player1 = new Player('Black', false);
+    this.player2 = new Player('White', true);
+    this.board = board;
+  }
+
+  get getGameId(): string {
+    return this.gameId;
+  }
+
+  set setGameId(id: string) {
+    this.gameId = id;
+  }
+
+  get getPlayer1(): Player {
+    return this.player1;
+  }
+
+  set setPlayer1(player: Player) {
+    this.player1 = player;
+  }
+
+  get getPlayer2(): Player {
+    return this.player2;
+  }
+
+  set setPlayer2(player: Player) {
+    this.player2 = player;
+  }
+
+  get getTurn(): Color {
+    return this.turn;
+  }
+
+  set setTurn(turn: Color) {
+    this.turn = turn;
+  }
+
+  get getState(): State {
+    return this.state;
+  }
+
+  set setState(state: State) {
+    this.state = state;
   }
 
   get getBoard(): Board {
@@ -24,17 +71,8 @@ export default class Game {
     this.board = board;
   }
 
-  get status(): GameStatus {
-    const gameStatus: GameStatus = {
-      state: this.state,
-      turn: this.turn,
-      players: [
-        this.player1,
-        this.player2,
-      ],
-      board: this.board,
-    }
-    return gameStatus;
+  get status() {
+    return this;
   }
 
   private changeTurn() {
@@ -47,27 +85,19 @@ export default class Game {
     }
   }
 
-  private initPlayers() {
-    this.player1 = new Player('Black', false);
-    this.player2 = new Player('White', true);
-    this.turn = 'White';
-    this.state = 'Ready';
-  }
-
-  private verifyTurn(turn: Color) {
+  private checkRightTurn(turn: Color): void {
     if (turn !== this.turn) throw new InvalidTurn();
   }
 
-  private verifyCheckMate(turn: Color, movement: Movement) {
-    if (this.board.checkMate(turn, movement)) throw new KingExposed();
+  private isKingInDanger(turn: Color, movement: Movement): void {
+    if (this.board.isKingInDanger(turn, movement)) throw new KingExposed();
   }
 
   movePiece(turn: Color, movement: Movement) {
-    this.verifyTurn(turn);
-    this.verifyCheckMate(turn, movement);
-    this.board.move(movement);
-    if (this.state === 'Ready') this.state = 'Playing';
+    this.checkRightTurn(turn);
+    this.isKingInDanger(turn, movement);
+    this.board.movePiece(movement);
     this.changeTurn();
+    if (this.state === 'Ready') this.state = 'Playing';
   }
 }
-

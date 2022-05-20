@@ -6,7 +6,7 @@ export default class Queen extends Piece {
   constructor(color: Color, position: Position) {
     super(color, position);
     this.type = 'Queen';
-    this.alive = true
+    this.alive = true;
   }
   canMoveTo(position: Position): boolean {
     const bishopMovement =
