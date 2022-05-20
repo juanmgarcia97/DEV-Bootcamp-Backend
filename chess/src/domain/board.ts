@@ -11,6 +11,7 @@ import InvalidPieceMovement from './exceptions/invalidPieceMovement';
 import BlockingPiece from './exceptions/blockingPiece';
 import Movement from './movement';
 import PieceNotFound from './exceptions/pieceNotFound';
+import MovingWrongPiece from './exceptions/movingWrongPiece';
 
 export default class Board {
   private cells!: Piece[];
@@ -59,7 +60,11 @@ export default class Board {
       2: Pawn,
       7: Pawn,
     };
-    this.cells.push(new pieces[position.getNFile](color, position));
+    position.getRank === 1
+      ? this.cells.push(new pieces[position.getNFile](color, position))
+      : position.getRank === 8
+      ? this.cells.push(new pieces[position.getNFile](color, position))
+      : false;
     position.getRank === 2
       ? this.cells.push(new pawns[position.getRank](color, position))
       : position.getRank === 7
@@ -101,6 +106,7 @@ export default class Board {
       fileDifference,
       rankDifference
     );
+    let isBlocking = false;
     for (let pivot = 1; pivot < biggestMove; pivot++) {
       const movingPosition = new Position(
         (movement.startFileNumber +
@@ -108,9 +114,9 @@ export default class Board {
         (movement.startRank +
           pivot * this.getMovementDirection(rankDifference)) as Rank
       );
-      if (!this.isPositionFree(movingPosition)) return true;
+      if (!this.isPositionFree(movingPosition)) isBlocking = true;
     }
-    return false;
+    return isBlocking;
   }
 
   isKingInDanger(color: Color, movement: Movement): boolean {
@@ -133,6 +139,10 @@ export default class Board {
     return piece;
   }
 
+  private verifyMovingRightPiece(turn: Color, piece: Piece) {
+    if (piece.getColor !== turn) throw new MovingWrongPiece();
+  }
+
   private verifyPieceCanMove(piece: Piece, position: Position): void {
     if (!piece.canMoveTo(position))
       throw new InvalidPieceMovement(piece.getType);
@@ -146,10 +156,21 @@ export default class Board {
       throw new BlockingPiece();
   }
 
-  movePiece(movement: Movement): void {
+  private verifyKillOpponentPiece(piece: Piece, position: Position) {
+    const opponentPiece = this.findPiece(position);
+    if (!opponentPiece) return false;
+    piece.getColor !== opponentPiece.getColor
+      ? opponentPiece.pieceKilled()
+      : false;
+    return true;
+  }
+
+  movePiece(turn: Color, movement: Movement): void {
     const piece = this.verifyPieceExists(movement.start);
+    this.verifyMovingRightPiece(turn, piece);
     this.verifyPieceCanMove(piece, movement.end);
     this.verifyIfOtherPieceIsBlockingWay(piece, movement);
+    this.verifyKillOpponentPiece(piece, movement.end);
     piece.moveTo(movement.end);
   }
 }

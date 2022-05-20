@@ -21,6 +21,15 @@ export default abstract class Piece {
     return this.color;
   }
 
+  get isAlive() {
+    return this.alive;
+  }
+
+  pieceKilled() {
+    this.alive = !this.alive;
+    this.position = null;
+  }
+
   moveTo(position: Position): void {
     this.position = position;
   }

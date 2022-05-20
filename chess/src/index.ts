@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import 'dotenv/config';
 import express, { json } from 'express';
 import { errorHandler } from './infrastructure/middlewares/error-handler';
 import GameController from './controllers/game.controller';

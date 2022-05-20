@@ -4,7 +4,7 @@ import { Color, State } from './types';
 import KingExposed from './exceptions/kingExposed';
 import InvalidTurn from './exceptions/invalidTurn';
 import Movement from './movement';
-import { uuid } from 'uuidv4';
+import { v4 as uuidv4 } from 'uuid';
 
 export default class Game {
   private gameId: string;
@@ -15,7 +15,7 @@ export default class Game {
   private board: Board;
 
   constructor(board: Board) {
-    this.gameId = uuid();
+    this.gameId = uuidv4();
     this.state = 'Ready';
     this.turn = 'White';
     this.player1 = new Player('Black', false);
@@ -96,7 +96,7 @@ export default class Game {
   movePiece(turn: Color, movement: Movement) {
     this.checkRightTurn(turn);
     this.isKingInDanger(turn, movement);
-    this.board.movePiece(movement);
+    this.board.movePiece(turn, movement);
     this.changeTurn();
     if (this.state === 'Ready') this.state = 'Playing';
   }

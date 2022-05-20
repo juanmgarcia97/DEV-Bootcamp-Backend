@@ -1,12 +1,12 @@
 import GameService from '../service/game.service.imp';
-import express, { Request, Response, NextFunction, response } from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import Movement from '../domain/movement';
 import container from '../../inversify.config';
 import { Color, TYPES } from '../domain/types';
 import { Position } from '../domain/position';
 import Game from '../domain/game';
-import { isUuid } from 'uuidv4';
 import InvalidGameId from '../domain/exceptions/invalidGameId';
+import { validate as uuidValidate } from 'uuid';
 
 const router = express.Router();
 
@@ -94,7 +94,7 @@ router.get(
   async (request: Request, response: Response, next: NextFunction) => {
     const { id } = request.params;
     try {
-      if (!isUuid(id)) throw new InvalidGameId();
+      if (!uuidValidate(id)) throw new InvalidGameId();
       const game = await gameService.loadGame(id);
       response.send({
         message: 'Game loaded successfully',

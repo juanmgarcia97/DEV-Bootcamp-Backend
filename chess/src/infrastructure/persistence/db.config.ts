@@ -3,11 +3,11 @@ import GameEntity from './entities/game.entity';
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
-  host: '127.0.0.1',
-  username: 'postgres',
-  password: 'juanmar1709',
-  database: 'chess-api',
-  port: 5433,
+  host: process.env.DB_HOST,
+  username: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
+  port: Number(process.env.DB_PORT),
   synchronize: true,
   logging: true,
   entities: [GameEntity],
