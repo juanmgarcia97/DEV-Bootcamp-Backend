@@ -15,7 +15,10 @@ amqp.connect(
       if (error1) console.log(error1);
 
       const exchange = 'logs';
+      const queue = 'fanoutQueue';
       const message = 'Hello World';
+
+      channel.assertQueue(queue, { durable: true, autoDelete: false });
 
       channel.assertExchange(exchange, 'fanout', { durable: false });
 

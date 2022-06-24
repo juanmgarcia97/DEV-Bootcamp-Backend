@@ -15,14 +15,13 @@ amqp.connect(
       if (error1) console.log(error1);
 
       const exchange = 'logs';
+      const queue = 'fanoutQueue';
 
       channel.assertExchange(exchange, 'fanout', { durable: false });
 
       channel.assertQueue(
-        '',
-        {
-          exclusive: true,
-        },
+        queue,
+        { durable: true, autoDelete: false },
         function (error2, q) {
           if (error2) console.log(error2);
           console.log(`Waiting for messages in queue ${q.queue}`);
