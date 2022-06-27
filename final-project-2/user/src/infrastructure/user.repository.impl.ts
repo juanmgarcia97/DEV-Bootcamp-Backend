@@ -1,6 +1,7 @@
 import { injectable } from 'inversify';
 import { Repository } from 'typeorm';
 import UserNotFound from '../domain/exceptions/userNotFound';
+import User from '../domain/user';
 import user from '../domain/user';
 import { UserRepository } from '../repository/user.repository';
 import { AppDataSource } from './persistence/db.config';
@@ -33,8 +34,9 @@ export default class UserRepositoryImpl implements UserRepository {
     return UserMapper.toDomain(userEntity);
   }
 
-  async updateUser(user: user): Promise<user> {
-    return await this.createUser(user);
+  async updateUser(id: number, user: user): Promise<user> {
+    await this.userRepositoryORM.update(id, user);
+    return user;
   }
 
   async deleteUser(id: number): Promise<void> {

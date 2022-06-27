@@ -15,8 +15,8 @@ export default class UserServiceImpl implements UserService {
   async findUser(id: number): Promise<user> {
     return await this.userRepository.findUser(id);
   }
-  async updateUser(user: user): Promise<user> {
-    return await this.userRepository.updateUser(user);
+  async updateUser(id: number, user: user): Promise<user> {
+    return await this.userRepository.updateUser(id, user);
   }
   async deleteUser(id: number): Promise<void> {
     await this.userRepository.deleteUser(id);
