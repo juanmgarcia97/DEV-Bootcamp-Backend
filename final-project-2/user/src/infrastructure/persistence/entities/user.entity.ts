@@ -2,8 +2,8 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export default class UserEntity {
-  @PrimaryGeneratedColumn()
-  id!: number;
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
 
   @Column()
   nickname!: string;
@@ -13,4 +13,7 @@ export default class UserEntity {
 
   @Column()
   age!: number;
+
+  @Column({ default: 0 })
+  attendance!: number;
 }

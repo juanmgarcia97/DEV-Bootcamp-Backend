@@ -3,12 +3,14 @@ import UserEntity from '../entities/user.entity';
 
 export default class UserMapper {
   static toDomain(entity: UserEntity): User {
-    return new User(
+    const domain = new User(
       entity.id,
       entity.nickname,
       entity.fullName,
-      Number(entity.age)
+      Number(entity.age),
+      entity.attendance
     );
+    return domain;
   }
 
   static toEntity(domain: User): UserEntity {
@@ -17,6 +19,7 @@ export default class UserMapper {
     userEntity.nickname = domain.nickname;
     userEntity.fullName = domain.fullName;
     userEntity.age = domain.age;
+    userEntity.attendance = domain.attendance;
     return userEntity;
   }
 
@@ -27,7 +30,8 @@ export default class UserMapper {
           entity.id,
           entity.nickname,
           entity.fullName,
-          Number(entity.age)
+          Number(entity.age),
+          entity.attendance
         )
     );
   }

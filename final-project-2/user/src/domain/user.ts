@@ -1,39 +1,48 @@
 export default class User {
   constructor(
-    private _id: number,
-    private _nickname: string,
-    private _fullName: string,
-    private _age: number
+    private userId: string,
+    private userNickname: string,
+    private userFullName: string,
+    private userAge: number,
+    private userAttendance?: number
   ) {}
 
-  public get id(): number {
-    return this._id;
+  get id(): string {
+    return this.userId;
   }
 
-  public set id(value: number) {
-    this._id = value;
+  set id(value: string) {
+    this.userId = value;
   }
 
-  public get nickname(): string {
-    return this._nickname;
+  get nickname(): string {
+    return this.userNickname;
   }
-  public set nickname(value: string) {
-    this._nickname = value;
-  }
-
-  public get fullName(): string {
-    return this._fullName;
+  set nickname(value: string) {
+    this.userNickname = value;
   }
 
-  public set fullName(value: string) {
-    this._fullName = value;
+  get fullName(): string {
+    return this.userFullName;
   }
 
-  public get age(): number {
-    return this._age;
+  set fullName(value: string) {
+    this.userFullName = value;
   }
 
-  public set age(value: number) {
-    this._age = value;
+  get age(): number {
+    return this.userAge;
+  }
+
+  set age(value: number) {
+    this.userAge = value;
+  }
+
+  get attendance(): number {
+    return this.userAttendance ?? 0;
+  }
+
+  set attendance(value: number) {
+    this.userAttendance = value;
   }
 }
