@@ -1,5 +1,6 @@
 import { injectable } from 'inversify';
 import { ILike, Repository } from 'typeorm';
+import EmptyProperty from '../domain/exceptions/emptyProperty';
 import EmptyUser from '../domain/exceptions/emptyUser';
 import UserNotFound from '../domain/exceptions/userNotFound';
 import User from '../domain/user';
@@ -36,6 +37,7 @@ export default class UserRepositoryImpl implements UserRepository {
   }
 
   async findUserByNickname(nickname: string): Promise<User[]> {
+    if (!nickname) throw new EmptyProperty(nickname);
     const userEntity = await this.userRepositoryORM.find({
       where: {
         nickname: ILike(`%${nickname}%`),
@@ -46,6 +48,7 @@ export default class UserRepositoryImpl implements UserRepository {
   }
 
   async findUserByFullName(fullName: string): Promise<User[]> {
+    if (!fullName) throw new EmptyProperty(fullName);
     const userEntity = await this.userRepositoryORM.find({
       where: { fullName: ILike(`%${fullName}%`) },
     });
