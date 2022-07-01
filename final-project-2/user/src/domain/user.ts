@@ -1,4 +1,7 @@
+import { Attendance } from './attendance';
+
 export default class User {
+  private userAttendances!: Attendance[];
   constructor(
     private userId: string,
     private userNickname: string,
@@ -44,5 +47,13 @@ export default class User {
 
   set attendance(value: number) {
     this.userAttendance = value;
+  }
+
+  get attendances(): Attendance[] {
+    return this.userAttendances;
+  }
+
+  set attendances(value: Attendance[]) {
+    this.userAttendances = value;
   }
 }

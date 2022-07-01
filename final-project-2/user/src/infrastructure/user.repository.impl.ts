@@ -1,5 +1,6 @@
 import { injectable } from 'inversify';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
+import EmptyUser from '../domain/exceptions/emptyUser';
 import UserNotFound from '../domain/exceptions/userNotFound';
 import User from '../domain/user';
 import { UserRepository } from '../repository/user.repository';
@@ -21,6 +22,7 @@ export default class UserRepositoryImpl implements UserRepository {
   }
 
   async createUser(user: User): Promise<User> {
+    if (!user) throw new EmptyUser();
     const userEntity = await this.userRepositoryORM.save(
       UserMapper.toEntity(user)
     );
@@ -33,19 +35,26 @@ export default class UserRepositoryImpl implements UserRepository {
     return UserMapper.toDomain(userEntity);
   }
 
-  async findUserByNickname(nickname: string): Promise<User> {
-    const userEntity = await this.userRepositoryORM.findOneBy({ nickname });
-    if (!userEntity) throw new UserNotFound();
-    return UserMapper.toDomain(userEntity);
+  async findUserByNickname(nickname: string): Promise<User[]> {
+    const userEntity = await this.userRepositoryORM.find({
+      where: {
+        nickname: ILike(`%${nickname}%`),
+      },
+    });
+    if (userEntity.length === 0) throw new UserNotFound();
+    return UserMapper.toDomainList(userEntity);
   }
 
-  async findUserByFullName(fullName: string): Promise<User> {
-    const userEntity = await this.userRepositoryORM.findOneBy({ fullName });
-    if (!userEntity) throw new UserNotFound();
-    return UserMapper.toDomain(userEntity);
+  async findUserByFullName(fullName: string): Promise<User[]> {
+    const userEntity = await this.userRepositoryORM.find({
+      where: { fullName: ILike(`%${fullName}%`) },
+    });
+    if (userEntity.length === 0) throw new UserNotFound();
+    return UserMapper.toDomainList(userEntity);
   }
 
   async updateUser(id: string, user: User): Promise<User> {
+    await this.findUserById(id);
     user.id = id;
     await this.userRepositoryORM.update(id, UserMapper.toEntity(user));
     return user;

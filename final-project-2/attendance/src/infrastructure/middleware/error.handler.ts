@@ -1,7 +1,6 @@
+import { AxiosError } from 'axios';
 import { NextFunction, Request, Response } from 'express';
 import { QueryFailedError } from 'typeorm';
-import EmptyUser from '../../domain/exceptions/emptyUser';
-import UserNotFound from '../../domain/exceptions/userNotFound';
 
 export function errorHandler(
   err: Error,
@@ -9,7 +8,7 @@ export function errorHandler(
   res: Response,
   next: NextFunction
 ) {
-  if (err instanceof UserNotFound) {
+  if (err instanceof AxiosError) {
     res.status(404).json({
       name: err.name,
       message: err.message,

@@ -5,10 +5,33 @@ import { UserService } from '../service/user.service';
 import { validate as uuidValidate } from 'uuid';
 import InvalidUserId from '../domain/exceptions/invalidUserId';
 import EmptyUser from '../domain/exceptions/emptyUser';
+import { QueryFailedError } from 'typeorm';
 
 const router = express.Router();
 
 const userService: UserService = container.get<UserService>('UserService');
+
+router.get(
+  '/filter',
+  async (request: Request, response: Response, next: NextFunction) => {
+    try {
+      const { nickname, fullName } = request.query;
+      let foundUsers: User[] = [];
+      if (nickname) {
+        foundUsers = await userService.findUserByNickname(nickname as string);
+      }
+      if (fullName) {
+        foundUsers = await userService.findUserByFullName(fullName as string);
+      }
+      response.status(200).json({
+        message: 'User(s) found',
+        data: foundUsers,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 router.get(
   '/',
@@ -18,40 +41,6 @@ router.get(
       response.status(200).json({
         message: 'Users found',
         data: users,
-      });
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
-router.get(
-  '/filter',
-  async (request: Request, response: Response, next: NextFunction) => {
-    try {
-      const { property } = request.query;
-      // if (!uuidValidate(nickname)) throw new InvalidUserId();
-      // const user = await userService.findUserByNickname(nickname);
-      response.status(200).json({
-        message: 'User found',
-        data: property,
-      });
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
-router.get(
-  '/:fullName',
-  async (request: Request, response: Response, next: NextFunction) => {
-    try {
-      const { fullName } = request.params;
-      if (!uuidValidate(fullName)) throw new InvalidUserId();
-      const user = await userService.findUserByFullName(fullName);
-      response.status(200).json({
-        message: 'User found',
-        data: user,
       });
     } catch (error) {
       next(error);
@@ -85,6 +74,7 @@ router.post(
         data: createdUser,
       });
     } catch (error) {
+      if (error instanceof QueryFailedError) next(new EmptyUser());
       next(error);
     }
   }

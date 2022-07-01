@@ -10,6 +10,7 @@ export default class UserMapper {
       Number(entity.age),
       entity.attendance
     );
+    domain.attendances = entity.attendances;
     return domain;
   }
 
@@ -20,19 +21,21 @@ export default class UserMapper {
     userEntity.fullName = domain.fullName;
     userEntity.age = domain.age;
     userEntity.attendance = domain.attendance;
+    userEntity.attendances = domain.attendances;
     return userEntity;
   }
 
   static toDomainList(entities: UserEntity[]): User[] {
-    return entities.map(
-      (entity) =>
-        new User(
-          entity.id,
-          entity.nickname,
-          entity.fullName,
-          Number(entity.age),
-          entity.attendance
-        )
-    );
+    return entities.map((entity) => {
+      const domain = new User(
+        entity.id,
+        entity.nickname,
+        entity.fullName,
+        Number(entity.age),
+        entity.attendance
+      );
+      domain.attendances = entity.attendances;
+      return domain;
+    });
   }
 }
