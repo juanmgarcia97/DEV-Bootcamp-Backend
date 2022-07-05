@@ -1,38 +1,40 @@
+import { ObjectID } from 'typeorm';
 import { Attendance } from '../../../domain/attendance';
 import { AttendanceEntity } from '../entities/attendance.entity';
 
 export class AttendanceMapper {
   static toDomain(entity: AttendanceEntity): Attendance {
-    return new Attendance(
-      entity.id,
+    const domain = new Attendance(
+      entity._id,
       entity.userid,
       entity.startTime,
       entity.endTime,
       entity.date,
       entity.notes
     );
+    return domain;
   }
 
   static toEntity(domain: Attendance): AttendanceEntity {
     const entity = new AttendanceEntity();
-    entity.id = domain.id;
+    entity._id = domain._id;
     entity.userid = domain.userid;
     entity.startTime = domain.startTime;
     entity.endTime = domain.endTime;
+    entity.date = domain.date;
     entity.notes = domain.notes;
     return entity;
   }
 
   static toDomainList(entities: AttendanceEntity[]): Attendance[] {
     return entities.map((entity) => {
-      return new Attendance(
-        entity.id,
-        entity.userid,
-        entity.startTime,
-        entity.endTime,
-        entity.date,
-        entity.notes
-      );
+      return this.toDomain(entity);
+    });
+  }
+
+  static toEntityList(domains: Attendance[]): AttendanceEntity[] {
+    return domains.map((domain) => {
+      return this.toEntity(domain);
     });
   }
 }

@@ -6,13 +6,13 @@ export class Attendance {
     private attendanceEndTime: string,
     private attendanceDate: Date,
     private attendanceNotes: string
-  ) {}
+  ) { }
 
-  get id() {
+  get _id() {
     return this.attendanceId;
   }
 
-  set id(value: string) {
+  set _id(value: string) {
     this.attendanceId = value;
   }
 

@@ -9,6 +9,7 @@ export function errorHandler(
   next: NextFunction
 ) {
   if (err instanceof AxiosError) {
+    console.log(err);
     res.status(404).json({
       name: err.name,
       message: err.message,

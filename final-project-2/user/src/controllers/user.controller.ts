@@ -6,10 +6,13 @@ import { validate as uuidValidate } from 'uuid';
 import InvalidUserId from '../domain/exceptions/invalidUserId';
 import EmptyUser from '../domain/exceptions/emptyUser';
 import { QueryFailedError } from 'typeorm';
+import axios from 'axios';
 
 const router = express.Router();
 
 const userService: UserService = container.get<UserService>('UserService');
+
+const attendanceApi = 'http://localhost:3001/attendances';
 
 router.get(
   '/filter',
@@ -34,10 +37,31 @@ router.get(
 );
 
 router.get(
+  '/:id',
+  async (request: Request, response: Response, next: NextFunction) => {
+    try {
+      const { id } = request.params;
+      const user = await userService.findUserById(id);
+      response.status(200).json({
+        message: 'User found',
+        data: user
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+)
+
+router.get(
   '/',
   async (request: Request, response: Response, next: NextFunction) => {
     try {
       const users = await userService.findAll();
+      // users.forEach(async (user) => {
+      //   const response = await axios.get(`${attendanceApi}/user/${user.id}`);
+      //   user.attendances = response.data.data;
+      // });
+      // // users = usersDetailled;
       response.status(200).json({
         message: 'Users found',
         data: users,
@@ -55,7 +79,7 @@ router.delete(
       const { id } = request.params;
       if (!uuidValidate(id)) throw new InvalidUserId();
       await userService.deleteUser(id);
-      response.status(204);
+      response.status(204).send();
     } catch (error) {
       next(error);
     }

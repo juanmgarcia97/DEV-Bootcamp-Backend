@@ -11,6 +11,7 @@
   "author": "Juan Martin Garcia",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.27.2",
     "dotenv": "^16.0.1",
     "express": "^4.17.3",
     "pg": "^8.7.3",

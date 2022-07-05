@@ -34,7 +34,7 @@ router.post(
   async (request: Request, response: Response, next: NextFunction) => {
     try {
       const attendance = request.body;
-      if (attendance !== {}) throw new InvalidAttendance();
+      if (attendance === {}) throw new InvalidAttendance(attendance);
       const newAttendance = await attendanceService.createAttendance(
         attendance
       );
@@ -42,6 +42,19 @@ router.post(
         message: 'Attendance created',
         data: newAttendance,
       });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.delete(
+  '/user/:id',
+  async (request: Request, response: Response, next: NextFunction) => {
+    try {
+      const { id } = request.params;
+      await attendanceService.deleteAttendancesForUser(id);
+      response.status(204).send();
     } catch (error) {
       next(error);
     }

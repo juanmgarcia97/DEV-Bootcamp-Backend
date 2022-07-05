@@ -2,12 +2,21 @@ import { inject, injectable } from 'inversify';
 import { Attendance } from '../domain/attendance';
 import { AttendanceRepository } from '../repository/attendance.repository';
 import { AttendanceService } from './attendance.service';
+import { UserService } from './user.service';
+import { AxiosError } from 'axios';
+import { UserNotFound } from '../domain/exceptions/userNotFound';
 
 @injectable()
 export class AttendanceServiceImpl implements AttendanceService {
   @inject('AttendanceRepository') attendanceRepository!: AttendanceRepository;
+  @inject('UserService') userService!: UserService;
 
   async createAttendance(attendance: Attendance): Promise<Attendance> {
+    try {
+      await this.userService.findUserById(attendance.userid);
+    } catch (error) {
+      if (error instanceof AxiosError) throw new UserNotFound;
+    }
     return this.attendanceRepository.createAttendance(attendance);
   }
 
@@ -19,14 +28,7 @@ export class AttendanceServiceImpl implements AttendanceService {
     return this.attendanceRepository.findAttendanceById(id);
   }
 
-  async updateAttendance(
-    id: string,
-    attendance: Attendance
-  ): Promise<Attendance> {
-    return this.attendanceRepository.updateAttendance(id, attendance);
-  }
-
-  async deleteAttendance(id: string): Promise<void> {
-    await this.attendanceRepository.deleteAttendance(id);
+  async deleteAttendancesForUser(id: string): Promise<void> {
+    await this.attendanceRepository.deleteAttendancesForUser(id);
   }
 }

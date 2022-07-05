@@ -1,5 +1,5 @@
 import { injectable } from 'inversify';
-import { MongoRepository } from 'typeorm';
+import { In, MongoRepository, ObjectID } from 'typeorm';
 import { Attendance } from '../domain/attendance';
 import { AttendanceNotFound } from '../domain/exceptions/attendanceNotFound';
 import EmptyProperty from '../domain/exceptions/emptyProperty';
@@ -18,7 +18,7 @@ export class AttendanceRepositoryImpl implements AttendanceRepository {
       AppDataSource.getMongoRepository(AttendanceEntity);
   }
   async createAttendance(attendance: Attendance): Promise<Attendance> {
-    if (!attendance) throw new InvalidAttendance();
+    // if (!attendance) throw new InvalidAttendance();
     const attendanceEntity = await this.attendanceRepositoryORM.save(
       AttendanceMapper.toEntity(attendance)
     );
@@ -37,30 +37,14 @@ export class AttendanceRepositoryImpl implements AttendanceRepository {
   async findAttendanceById(id: string): Promise<Attendance> {
     if (!id) throw new EmptyProperty(id);
     const foundAttendance = await this.attendanceRepositoryORM.findOne({
-      where: { id },
+      where: { _id: id },
     });
     if (!foundAttendance) throw new AttendanceNotFound();
     return AttendanceMapper.toDomain(foundAttendance);
   }
 
-  async updateAttendance(
-    id: string,
-    attendance: Attendance
-  ): Promise<Attendance> {
-    await this.findAttendanceById(id);
-    if (!attendance) throw new InvalidAttendance();
-    attendance.id = id;
-    await this.attendanceRepositoryORM.update(
-      id,
-      AttendanceMapper.toEntity(attendance)
-    );
-    return attendance;
-  }
-
-  async deleteAttendance(id: string): Promise<void> {
-    const attendance = await this.findAttendanceById(id);
-    await this.attendanceRepositoryORM.remove(
-      AttendanceMapper.toEntity(attendance)
-    );
+  async deleteAttendancesForUser(id: string): Promise<void> {
+    const attendances = await this.findAllByUser(id);
+    await this.attendanceRepositoryORM.remove(AttendanceMapper.toEntityList(attendances));
   }
 }

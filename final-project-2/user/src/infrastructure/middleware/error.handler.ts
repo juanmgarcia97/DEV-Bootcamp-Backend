@@ -1,6 +1,4 @@
 import { NextFunction, Request, Response } from 'express';
-import { QueryFailedError } from 'typeorm';
-import EmptyUser from '../../domain/exceptions/emptyUser';
 import UserNotFound from '../../domain/exceptions/userNotFound';
 
 export function errorHandler(

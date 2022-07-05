@@ -1,14 +1,14 @@
-import { Attendance } from './attendance';
+import { Attendance } from "../service/attendance.service";
 
 export default class User {
-  private userAttendances!: Attendance[];
+  private userAttendances?: Attendance[];
   constructor(
     private userId: string,
     private userNickname: string,
     private userFullName: string,
     private userAge: number,
     private userAttendance?: number
-  ) {}
+  ) { }
 
   get id(): string {
     return this.userId;
@@ -50,7 +50,7 @@ export default class User {
   }
 
   get attendances(): Attendance[] {
-    return this.userAttendances;
+    return this.userAttendances ?? [];
   }
 
   set attendances(value: Attendance[]) {

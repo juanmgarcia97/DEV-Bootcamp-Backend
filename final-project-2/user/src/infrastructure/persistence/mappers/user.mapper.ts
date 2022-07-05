@@ -10,7 +10,6 @@ export default class UserMapper {
       Number(entity.age),
       entity.attendance
     );
-    domain.attendances = entity.attendances;
     return domain;
   }
 
@@ -21,7 +20,6 @@ export default class UserMapper {
     userEntity.fullName = domain.fullName;
     userEntity.age = domain.age;
     userEntity.attendance = domain.attendance;
-    userEntity.attendances = domain.attendances;
     return userEntity;
   }
 
@@ -34,7 +32,6 @@ export default class UserMapper {
         Number(entity.age),
         entity.attendance
       );
-      domain.attendances = entity.attendances;
       return domain;
     });
   }
