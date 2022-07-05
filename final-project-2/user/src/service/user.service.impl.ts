@@ -1,7 +1,4 @@
 import { inject, injectable } from 'inversify';
-import EmptyProperty from '../domain/exceptions/emptyProperty';
-import EmptyUser from '../domain/exceptions/emptyUser';
-import EmptyUserId from '../domain/exceptions/emptyUserId';
 import User from '../domain/user';
 import { UserRepository } from '../repository/user.repository';
 import { UserService } from './user.service';
@@ -24,7 +21,9 @@ export default class UserServiceImpl implements UserService {
 
   async findUserById(id: string): Promise<User> {
     const userFound = await this.userRepository.findUserById(id);
-    userFound.attendances = await this.attendanceService.findAllByUser(userFound.id);
+    userFound.attendances = await this.attendanceService.findAllByUser(
+      userFound.id
+    );
     return userFound;
   }
 

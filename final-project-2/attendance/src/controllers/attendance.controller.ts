@@ -1,17 +1,12 @@
-import axios, { AxiosError } from 'axios';
 import express, { NextFunction, Request, Response } from 'express';
 import container from '../../inversify.config';
-import { Attendance } from '../domain/attendance';
 import { InvalidAttendance } from '../domain/exceptions/invalidAttendance';
-import { UserNotFound } from '../domain/exceptions/userNotFound';
 import { AttendanceService } from '../service/attendance.service';
 
 const router = express.Router();
 
 const attendanceService: AttendanceService =
   container.get<AttendanceService>('AttendanceService');
-
-const usersApi = 'http://localhost:3000/users';
 
 router.get(
   '/user/:userId',
