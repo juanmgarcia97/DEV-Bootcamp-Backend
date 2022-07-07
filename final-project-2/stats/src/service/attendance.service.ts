@@ -1,9 +1,9 @@
 import axios from 'axios';
 export class AttendanceService {
-    private attendanceApi = 'http://localhost:3001/attendances'
+  private attendanceApi = process.env.ATTENDANCE_API;
 
-    async getAttendancesByUserId(id: string) {
-        const response = await axios.get(`${this.attendanceApi}/user/${id}`);
-        return response.data.data;
-    }
+  async getAttendancesByUserId(id: string) {
+    const response = await axios.get(`${this.attendanceApi}/user/${id}`);
+    return response.data.data;
+  }
 }

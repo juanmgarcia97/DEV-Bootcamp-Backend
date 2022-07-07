@@ -2,11 +2,10 @@ import { Column, Entity, ObjectID, ObjectIdColumn } from 'typeorm';
 
 @Entity()
 export class AttendanceEntity {
-
   @ObjectIdColumn()
-  _id!: string;
+  _id!: ObjectID;
 
-  @Column({ nullable: false, name: 'userId' })
+  @Column({ nullable: false })
   userid!: string;
 
   @Column({ nullable: false })

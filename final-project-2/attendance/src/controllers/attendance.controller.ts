@@ -56,6 +56,19 @@ router.delete(
   }
 );
 
+router.delete(
+  '/:id',
+  async (request: Request, response: Response, next: NextFunction) => {
+    try {
+      const { id } = request.params;
+      await attendanceService.deleteAttendanceById(id);
+      response.status(204).send();
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 router.all('*', () => {
   throw new Error('Page not found');
 });

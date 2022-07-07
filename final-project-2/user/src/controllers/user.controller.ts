@@ -122,16 +122,19 @@ router.patch(
       const { id } = request.params;
       if (!uuidValidate(id)) throw new InvalidUserId();
       const { attendance } = request.body;
-      const updatedUser = await userService.updateUserAttendance(id, attendance);
+      const updatedUser = await userService.updateUserAttendance(
+        id,
+        attendance
+      );
       response.status(200).json({
         message: 'User attendance was updated',
-        data: updatedUser
-      })
+        data: updatedUser,
+      });
     } catch (error) {
       next(error);
     }
   }
-)
+);
 
 router.all('*', () => {
   throw new Error('Page not found');

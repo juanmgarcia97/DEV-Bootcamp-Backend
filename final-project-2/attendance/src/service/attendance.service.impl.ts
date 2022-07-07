@@ -12,16 +12,18 @@ export class AttendanceServiceImpl implements AttendanceService {
   @inject('AttendanceRepository') attendanceRepository!: AttendanceRepository;
   @inject('UserService') userService!: UserService;
 
-  constructor(@inject('SenderService') private rabbit: SenderService) { }
+  constructor(@inject('SenderService') private rabbit: SenderService) {}
 
   async createAttendance(attendance: Attendance): Promise<Attendance> {
     try {
       await this.userService.findUserById(attendance.userid);
     } catch (error) {
-      if (error instanceof AxiosError) throw new UserNotFound;
+      if (error instanceof AxiosError) throw new UserNotFound();
     }
-    const promise = await this.attendanceRepository.createAttendance(attendance)
-    this.rabbit.publishMessage(JSON.stringify({ message: 'Attendance created', userId: promise.userid }));
+    const promise = await this.attendanceRepository.createAttendance(
+      attendance
+    );
+    this.rabbit.publishMessage(promise.userid);
     return promise;
   }
 
@@ -35,5 +37,11 @@ export class AttendanceServiceImpl implements AttendanceService {
 
   async deleteAttendancesForUser(id: string): Promise<void> {
     await this.attendanceRepository.deleteAttendancesForUser(id);
+  }
+
+  async deleteAttendanceById(id: string): Promise<void> {
+    const attendance = await this.findAttendanceById(id);
+    await this.attendanceRepository.deleteAttendance(attendance);
+    this.rabbit.publishMessage(attendance.userid);
   }
 }
