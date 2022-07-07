@@ -7,5 +7,6 @@ export interface UserService {
   findUserByNickname(nickname: string): Promise<User[]>;
   findUserByFullName(fullName: string): Promise<User[]>;
   updateUser(id: string, user: User): Promise<User>;
+  updateUserAttendance(id: string, newAttendance: number): Promise<User>;
   deleteUser(id: string): Promise<void>;
 }

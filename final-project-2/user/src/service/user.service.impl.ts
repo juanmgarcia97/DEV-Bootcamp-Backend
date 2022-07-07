@@ -48,4 +48,10 @@ export default class UserServiceImpl implements UserService {
     }
     await this.userRepository.deleteUser(id);
   }
+
+  async updateUserAttendance(id: string, newAttendance: number): Promise<User> {
+    const user = await this.findUserById(id);
+    user.attendance = newAttendance;
+    return this.updateUser(id, user);
+  }
 }

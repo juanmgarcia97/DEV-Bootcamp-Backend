@@ -12,8 +12,6 @@ const router = express.Router();
 
 const userService: UserService = container.get<UserService>('UserService');
 
-const attendanceApi = 'http://localhost:3001/attendances';
-
 router.get(
   '/filter',
   async (request: Request, response: Response, next: NextFunction) => {
@@ -41,6 +39,7 @@ router.get(
   async (request: Request, response: Response, next: NextFunction) => {
     try {
       const { id } = request.params;
+      if (!uuidValidate(id)) throw new InvalidUserId();
       const user = await userService.findUserById(id);
       response.status(200).json({
         message: 'User found',
@@ -57,11 +56,6 @@ router.get(
   async (request: Request, response: Response, next: NextFunction) => {
     try {
       const users = await userService.findAll();
-      // users.forEach(async (user) => {
-      //   const response = await axios.get(`${attendanceApi}/user/${user.id}`);
-      //   user.attendances = response.data.data;
-      // });
-      // // users = usersDetailled;
       response.status(200).json({
         message: 'Users found',
         data: users,
@@ -121,6 +115,24 @@ router.put(
     }
   }
 );
+
+router.patch(
+  '/:id',
+  async (request: Request, response: Response, next: NextFunction) => {
+    try {
+      const { id } = request.params;
+      if (!uuidValidate(id)) throw new InvalidUserId();
+      const { attendance } = request.body;
+      const updatedUser = await userService.updateUserAttendance(id, attendance);
+      response.status(200).json({
+        message: 'User attendance was updated',
+        data: updatedUser
+      })
+    } catch (error) {
+      next(error);
+    }
+  }
+)
 
 router.all('*', () => {
   throw new Error('Page not found');

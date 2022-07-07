@@ -5,11 +5,14 @@ import { AttendanceService } from './attendance.service';
 import { UserService } from './user.service';
 import { AxiosError } from 'axios';
 import { UserNotFound } from '../domain/exceptions/userNotFound';
+import { SenderService } from '../rabbitmq/sender.service';
 
 @injectable()
 export class AttendanceServiceImpl implements AttendanceService {
   @inject('AttendanceRepository') attendanceRepository!: AttendanceRepository;
   @inject('UserService') userService!: UserService;
+
+  constructor(@inject('SenderService') private rabbit: SenderService) { }
 
   async createAttendance(attendance: Attendance): Promise<Attendance> {
     try {
@@ -17,7 +20,9 @@ export class AttendanceServiceImpl implements AttendanceService {
     } catch (error) {
       if (error instanceof AxiosError) throw new UserNotFound;
     }
-    return this.attendanceRepository.createAttendance(attendance);
+    const promise = await this.attendanceRepository.createAttendance(attendance)
+    this.rabbit.publishMessage(JSON.stringify({ message: 'Attendance created', userId: promise.userid }));
+    return promise;
   }
 
   async findAllByUser(userId: string): Promise<Attendance[]> {
