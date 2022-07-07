@@ -6,7 +6,6 @@ import { validate as uuidValidate } from 'uuid';
 import InvalidUserId from '../domain/exceptions/invalidUserId';
 import EmptyUser from '../domain/exceptions/emptyUser';
 import { QueryFailedError } from 'typeorm';
-import axios from 'axios';
 
 const router = express.Router();
 
@@ -43,13 +42,13 @@ router.get(
       const user = await userService.findUserById(id);
       response.status(200).json({
         message: 'User found',
-        data: user
+        data: user,
       });
     } catch (error) {
       next(error);
     }
   }
-)
+);
 
 router.get(
   '/',
