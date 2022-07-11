@@ -20,10 +20,10 @@ export class StatsService {
 
   createConnection() {
     amqp.connect(this.config, (error, connection) => {
-      if (error) throw new Error(error);
+      if (error) console.error(error);
       this.connection = connection;
       connection.createChannel((error1, channel) => {
-        if (error1) throw new Error(error1);
+        if (error1) console.error(error1);
         this.channel = channel;
         this.consumeMessage();
       });
